@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var config = require('config');
+var geocoder = require('geocoder');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -8,23 +10,29 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
+
 router.get('/do', function(req, res, next) {
-	var geocodeURI = 'http://geo.search.olp.yahooapis.jp/OpenLocalPlatform/V1/geoCoder?';
 	var address = req.query.address;
-	if( !address ){ console.log("Not Found adress."); res.redirect(302, "/"); }
+ 
+	AddressToLngLon(address, function(){});
 
-	geocodeURI += "&appid=" + "dj0zaiZpPWtoTUdJNW9yMGlwcyZzPWNvbnN1bWVyc2VjcmV0Jng9ZmE-";
-	geocodeURI += "&output=json";
-	geocodeURI += "&query=" + encodeURI(address.toString("utf8"));
-
-	request(geocodeURI, function(err, res, body) {
-		if( !err && res.statusCode == 200) {
-			var json = JSON.parse(body);
-			console.log(json);
-		};
-	});
-
-	res.render('do', {title: "aa"});
+	res.render('do', {title: config.Yahoo.appid});
 });
 
+
 module.exports = router;
+
+
+
+// 住所(施設、郵便番号)を緯度経度に変換。
+var AddressToLngLon = function(address, callback){
+	geocoder.geocode(address, function( err, data ){
+		if( err ){ console.log("Not Found adress."); throw err; }
+		var formatted_address = data.results[0].formatted_address;
+		var geometry = data.results[0].geometry.location;
+
+		console.log(formatted_address);
+		console.log(geometry);
+	});
+};
