@@ -1,18 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>WillDo -ウィルドゥ-</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
   </head>
+
+
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+              </button> <a class="navbar-brand" href="/">WillDo</a>
+            </div>
+        
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <form class="navbar-form navbar-right" role="search" method="GET" action="/search">
+                <div class="form-group">
+                  <input type="text" name="address" id="address" class="form-control">
+                </div> 
+                <button type="submit" class="btn btn-default" id="search-btn">Search</button>
+              </form>
+            </div>
+          </nav>
+        </div>
+      </div>
 
-    <h1>WillDo -ウィルドゥ-</h1>
+      <div class="row">
 
-    <form method="GET" action="/do">
-    	<input type="text" name="address" id="address" />
-    	<input type="submit" />
-    </form>
+        <% messages.forEach( function(message){ %>
+          <div class="alert alert-warning alert-dismisable" role="alert" id="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
+            <p><strong>warning</strong>：<%= message %></p>
+          </div>
+        <% }) %>
+
+        <div class="col-md-offset-3 col-md-6">
+          <div class="search-block">
+            <h2 class="text-center">WillDo</h2><br><br>
+
+            <form role="form" method="GET" action="/search">
+              <div class="form-inline text-center">
+                <input type="text" name="address" id="address" class="form-control">
+                <button type="submit" class="btn btn-default" id="search-btn">Search</button>
+              </div>
+            </form>
+            <p class="help-block text-center text-danger" style="font-size: 10px;">ex.) 住所, 駅名, 郵便番号</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
   </body>
 </html>

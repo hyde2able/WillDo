@@ -1,0 +1,30 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url(../images/bg3.jpg) center center / cover no-repeat fixed;
+}
+@media only screen and (max-width: 767px) {
+  body {
+    background-image: url(images/background-photo-mobile-devices.jpg);
+  }
+}
+
+
+a {
+  color: #00B7FF;
+}
+
+.search-block { 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -150px;
+  margin-left: -300px;
+  width: 600px;
+  height: 300px;
+  border-radius: 30px;
+  background-color: ;
+}
+.search-block p {
+	color: white;
+}
