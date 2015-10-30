@@ -1,80 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var request = require('request');
-var config = require('config');
-var geocoder = require('geocoder');
-
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session')
-var flash = require('express-flash');
-
-// 大量のJSONをストリーミングで取得
-var JSONStream = require('JSONStream');
-var es = require('event-stream');
+var http = require('http');
 
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   console.log(req.flash());
-//   console.log(req.flash('alert'));
-//   // res.render('index', {messages: ['1', '2','3']});
-//   res.render('index', {messages: req.flash('alert')} );
-// });
-
-
-router.get('/', function(req, res, next) {
-	var address = req.query.address;
-	if( !address || address == "" ) {
-		res.render('search', {messages: ['住所や郵便番号を入力してください'] , title: '' } );
-		return;
-	}
-
-	AddressToLngLon(address, req, res, function(lat, lng){
-		ReverseGeo(lat, lng, function(add){
-			res.render('search', {messages: [], title: add});
-		});
-	});
-
-});
-
-
-// message関数を外部化する。socketを受け取る。
-exports.message = function(socket) {
-	// socketがmessageイベントを受けたら、クライアントに送信する。
-	socket.on('message', function(message) {
-		console.log(message + "を受診しました");
-		socket.emit('message', message);
-	});
-};
-
-
-router.get('/search', function(req, res, next) {
-	var address = req.query.address;
-	console.log(address);
-	if( !address || address == "") {
-		req.flash('alert', '住所や郵便番号を入力してください。');
-		console.log(req.flash('alert'));
- 		res.redirect(301, '/');
- 		return;
- 	}
-
-	AddressToLngLon(address, req, res, function(lat, lng){
-		ReverseGeo(lat, lng, function(add){
-			res.render('search', {title: add});
-		});
-	});
-
-
-});
-
-
-module.exports = router;
-
-
-
-// 住所(施設、郵便番号)を緯度経度に変換。
-var AddressToLngLon = function(address, req, res, callback){
+// 住所(施設、郵便番号)　→　緯度経度
+module.exports.AddressToLngLon = function(address, req, res, cb) {
 	geocoder.geocode(address, function( err, data ){
 		if( err ){
  			req.flash('alert', address + 'は検索できません。');
@@ -93,26 +21,25 @@ var AddressToLngLon = function(address, req, res, callback){
 		// Canpas(lat, lng);
 		// Gourmet(lat, lng);
 		// Place(lat, lng);
-		callback(lat, lng);
+		cb(lat, lng);
 	});
 };
 
-var ReverseGeo = function(lat, lng, callback){
+// 緯度経度　→　日本語で住所表示　
+module.exports.ReverseGeo = function(lat, lng, cb) {
 	var ReverseURI = "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?lat=" + lat + "&lon=" + lng + "&output=json&appid=" + config.Yahoo.appid;
 	request(ReverseURI, function(err, res, body){
 		if( !err && res.statusCode == 200){
 			var address = JSON.parse(body).Feature[0].Property.Address;
-			callback(address);
+			cb(address);
 		} else {
 			console.log("We couldn't reverseGeoCoder"); return;
 		}
 	});
-
 };
 
-
-// 緯度経度からその地点の天気情報を取得 by Yahoo
-var Weather = function(lat, lng, callback){
+// 緯度経度　→　その地点の天気情報 by Yahoo (1h)
+module.exports.Weather = function(lat, lng, cb) {
 	// Yahooは24時間あたり50000リクエストが上限
 	var weatherURI = "http://weather.olp.yahooapis.jp/v1/place?coordinates=" + lng + "," + lat + "&output=json&appid=" + config.Yahoo.appid;
 	request(weatherURI, function(err, res, body){
@@ -125,8 +52,8 @@ var Weather = function(lat, lng, callback){
 	});
 };
 
-// 緯度経度から近くのバーを検索する by BAR-NAVI
-var BarNavi = function(lat, lng, callback){
+// 緯度経度　→　付近のバーを検索 by BAR-NAVI
+module.exports.BarNavi = function(lat, lng, cb) {
 	var barURI = "http://webapi.suntory.co.jp/barnavi/v2/shops?key=" + config.BAR_NAVI.api_key + "&pattern=1&lat=" + lat + "&lng=" + lng;
 	barURI += "&format=json&url=http://localhost:3000";
 	request(barURI, function(err, res, body){
@@ -139,8 +66,8 @@ var BarNavi = function(lat, lng, callback){
 	});
 };
 
-// 緯度経度から近くのレストラン検索 by ぐるなび
-var GNavi = function(lat, lng, callback){
+// 緯度経度　→　付近のレストラン　by ぐるなび
+module.exports.GNavi = function(lat, lng, cb) {
 	var GNaviURI = "http://api.gnavi.co.jp/RestSearchAPI/20150630/?keyid=" + config.G_NAVI.api_key + "&format=json&latitude=" + lat + "&longitude=" + lng;
 	request(GNaviURI, function(err, res, body){
 		if( !err && res.statusCode == 200){
@@ -152,8 +79,8 @@ var GNavi = function(lat, lng, callback){
 	});
 };
 
-// 緯度経度から近くのキャンパスを検索 by りくなび
-var Canpas = function(lat, lng, callback){
+// 緯度経度　→　付近のキャンパス　by りくなび
+module.exports.Canpus = function(lat, lng, cb) {
 	var CanURI = "http://webservice.recruit.co.jp/shingaku/campus/v2/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
 	request(CanURI, function(err, res, body){
 		if( !err && res.statusCode == 200){
@@ -165,8 +92,8 @@ var Canpas = function(lat, lng, callback){
 	});
 };
 
-// 緯度経度から近くのグルメを検索 by リクナビ
-var Gourmet = function(lat, lng, callback){
+// 緯度経度　→　付近のグルメ by りくなび
+module.exports.Gourmet = function(lat, lng, cb) {
 	var GourmetURI = "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
 	request(GourmetURI, function(err, res, body){
 		if( !err && res.statusCode == 200){
@@ -178,7 +105,8 @@ var Gourmet = function(lat, lng, callback){
 	});
 };
 
-var Place = function(lat, lng, callback){
+// 緯度経度　→　付近の施設 by Yahoo
+module.exports.Place = function(lat, lng, cb) {
 	var PlaceURI = "http://placeinfo.olp.yahooapis.jp/V1/get?output=json&lat=" + lat + "&lon=" + lng + "&appid=" + config.Yahoo.appid;
 	request(PlaceURI, function(err, res, body){
 		if( !err && res.statusCode == 200){
@@ -199,6 +127,7 @@ var Place = function(lat, lng, callback){
 		}));
 
 };
+
 
 /*
 		使用しているAPI一覧

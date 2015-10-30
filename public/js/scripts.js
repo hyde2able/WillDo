@@ -10,18 +10,21 @@ $(function(){
  		});
   	}, 3000);
 
+
   	// ここでクリックを検知して画面遷移せず　Ajax　で表示できるように？
   	$('#search-btn').click( function() {
   		var address = $(this).closest("#address").val();
-
+  		socket.emit("message", address + 'を入力したよ');
   	});
 
-  	var socket = io();
 
-  	$('.form').submit(function() {
-  		socket.emit('chat message', $('#m').val);
-  		$('#m').val('');
-  		return false;
+  	// イベントとコールバックの定義
+  	var socket = io.connect();
+  	socket.on('connect', function() {
+  		console.log('つながったよーこれはクライアント側');
+  		socket.on('message', function(message) {
+  			console.log(message + "を受診したよ。クライアント側");
+  		});
   	});
 
 });
