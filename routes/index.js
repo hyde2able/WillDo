@@ -39,15 +39,6 @@ router.get('/', function(req, res, next) {
 });
 
 
-// message関数を外部化する。socketを受け取る。
-exports.message = function(socket) {
-	// socketがmessageイベントを受けたら、クライアントに送信する。
-	socket.on('message', function(message) {
-		console.log(message + "を受診しました");
-		socket.emit('message', message);
-	});
-};
-
 
 router.get('/search', function(req, res, next) {
 	var address = req.query.address;
