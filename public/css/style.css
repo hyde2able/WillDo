@@ -1,7 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: url(../images/bg3.jpg) center center / cover no-repeat fixed;
+  background: url(../images/bg4.jpeg) center center / cover no-repeat fixed;
 }
 @media only screen and (max-width: 767px) {
   body {
@@ -10,7 +10,7 @@ body {
 }
 
 
-a {
+.navbar a {
   color: #00B7FF;
 }
 
@@ -28,3 +28,25 @@ a {
 .search-block p {
 	color: white;
 }
+
+
+a.here {
+  margin: 5px;
+  padding: 0;
+  color: #fff;
+}
+
+img.here {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 3px;
+  border-radius: 30%;
+  border: 1px solid #c6bb80;
+  line-height: 50px;
+  text-align: center;
+}
+img.here:before { padding: 0; line-height: 50px; }
+a.here:hover img { background: #e1daba; }
+a.here:active img { opacity: .8; }
+

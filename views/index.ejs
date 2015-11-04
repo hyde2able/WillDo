@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,7 +12,10 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA5PmTLvL4mJoMcbP2s7BS5RSISr8FISXKAxN8mqh6f4UnxxOMoBTjZE1UqX5q96BXt4DgU_r5y2rvnw" type="text/javascript"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/scripts.js"></script>
   </head>
 
 
@@ -30,7 +33,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <form class="navbar-form navbar-right" role="search" method="GET" action="/">
                 <div class="form-group">
-                  <input type="text" name="address" id="address" class="form-control">
+                  <input type="text" name="address" id="address sub" class="form-control">
                 </div> 
                 <button type="submit" class="btn btn-default" id="search-btn">Search</button>
               </form>
@@ -41,20 +44,24 @@
 
       <div class="row">
 
-        <% messages.forEach( function(message){ %>
-          <div class="alert alert-warning alert-dismisable" role="alert" id="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
-            <p><strong>warning</strong>：<%= message %></p>
-          </div>
-        <% }) %>
+        <div id="messages">
+          <% messages.forEach( function(message){ %>
+            <div class="alert alert-warning alert-dismisable" role="alert" id="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
+              <p><strong>warning</strong>：<%= message %></p>
+            </div>
+          <% }) %>
+        </div>
 
         <div class="col-md-offset-3 col-md-6">
           <div class="search-block">
-            <h2 class="text-center">WillDo</h2><br><br>
+            <h2 class="text-center">WillDo</h2><br>
 
             <form role="form" method="GET" action="/">
               <div class="form-inline text-center">
-                <input type="text" name="address" id="address" class="form-control">
+                <input type="text" name="address" id="address main" class="form-control">
+                <div id="here-block" style="display: inline-block;"></div>
+                <!--<a class="here" id="here"><img src="../images/here.jpeg" class="here"></a>-->
                 <button type="submit" class="btn btn-default" id="search-btn">Search</button>
               </div>
             </form>
@@ -64,10 +71,5 @@
       </div>
     </div>
 
-
-
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
   </body>
 </html>
