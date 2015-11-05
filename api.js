@@ -13,7 +13,8 @@ var es = require('event-stream');
 
 // クライアントに送信するメソッドServer2Clientを持つオブジェクト
 var S2C = require('./bin/www');
-
+// このモジュール自身
+var me = require('./api.js');
 
 // 住所(施設、郵便番号)を緯度経度に変換。
 module.exports.AddressToLngLon = function(address, req, res, callback){
@@ -29,12 +30,12 @@ module.exports.AddressToLngLon = function(address, req, res, callback){
 		var lat = geometry.lat, lng = geometry.lng;
 		//console.log(formatted_address);
 		//console.log(geometry);
-		// Weather(lat, lng);
-		// BarNavi(lat, lng);
-		// GNavi(lat, lng);
-		// Canpas(lat, lng);
-		// Gourmet(lat, lng);
-		// Place(lat, lng);
+		me.Weather(lat, lng);
+		me.BarNavi(lat, lng);
+		me.GNavi(lat, lng);
+		me.Canpas(lat, lng);
+		me.Gourmet(lat, lng);
+		me.Place(lat, lng);
 		callback(lat, lng);
 	});
 };
@@ -61,6 +62,7 @@ module.exports.Weather = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var weatherList = JSON.parse(body).Feature[0].Property.WeatherList.Weather;
 			// console.log(weatherList); 
+			S2C.Server2Client('weather', weatherList);
 		} else {
 			console.log("We couldn't get weather info"); return;
 		}
@@ -75,6 +77,7 @@ module.exports.BarNavi = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var shops = JSON.parse(body).shops.shop;
 			// console.log(shops);
+			S2C.Server2Client('barnavi', shops);
 		} else {
 			console.log("We couldn't get bar info"); return;
 		}
@@ -88,6 +91,7 @@ module.exports.GNavi = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var rests = JSON.parse(body).rest;
 			// console.log(rests);
+			S2C.Server2Client('gnavi', rests);
 		} else {
 			console.log("We couldn't get restaurant info"); return;
 		}
@@ -101,6 +105,7 @@ module.exports.Canpas = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var canpas = JSON.parse(body).results.campus;
 			// console.log(canpas);
+			S2C.Server2Client('canpas', canpas);
 		} else {
 			console.log("We couldn't get canpas info"); return;
 		}
@@ -114,6 +119,7 @@ module.exports.Gourmet = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var gourmet = JSON.parse(body).results.shop;
 			// console.log(gourmet);
+			S2C.Server2Client('gourmet', gourmet);
 		} else {
 			console.log("We couldn't get Gourmet info"); return;
 		};
@@ -126,7 +132,7 @@ module.exports.Place = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var places = JSON.parse(body).ResultSet.Result;
 			// console.log(places);
-			jsonQueue.push(places);
+			S2C.Server2Client('place', places);
 		} else {
 			console.log("We couldn't get Place info"); return;
 		};

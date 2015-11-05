@@ -3,7 +3,6 @@ var router = express.Router();
 
 // APIを叩くメソッド一覧
 var api = require('../api.js');
-var S2C = require('../bin/www');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -13,16 +12,15 @@ var S2C = require('../bin/www');
 //   res.render('index', {messages: req.flash('alert')} );
 // });
 
+router.get('/', function(req, res, next) {
+	res.render('index', {messages: [], title: '' } );
+	return;
+});
+
 
 router.post('/', function(req, res, next) {
 	// var address = req.query.address;
 	var address = req.body.address;
-
-	// setTimeout(function() {
-	// 	S2C.Server2Client('sample', 'ksoamzoaksoamsoa');
-
-	// }, 3000);
-
 	if( !address || address == "" ) {
 		res.render('index', {messages: ['住所や郵便番号を入力してください'] , title: '' } );
 		return;
@@ -33,7 +31,6 @@ router.post('/', function(req, res, next) {
 			res.render('search', {messages: [], title: japan_address});
 		});
 	});
-
 
 });
 
