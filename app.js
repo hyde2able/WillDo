@@ -27,6 +27,7 @@ app.use(cookieParser('secret'));
 app.use(session({ cookie: { maxAge: 60000 },  store: sessionStore,  saveUninitialized: true,  resave: 'true',  secret: 'secret' }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+
 // ルート設定
 app.use('/', routes);
 app.use(function(req, res, next) {
@@ -65,26 +66,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
-// createServerの返り値を変数に入れる。
-var server = http.createServer(app);
-server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
-// socket.ioのモジュールを読み込み、bbsのモジュールにsocketを渡しておく。
-var io = require('socket.io');
-var io = io.listen(server);
-
-// io.socketsは接続された全てのsocketを指します。
-// on('connection')で接続した時のアクションを登録します。
-// ここでは、接続したsocketを受け取り、bbs.message関数に渡します。
-io.sockets.on('connection', function(socket) {
-  console.log('つながったよ');
-  routes.message(socket);
-});
-
 
 
 module.exports = app;

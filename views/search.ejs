@@ -18,6 +18,7 @@
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/scripts.js"></script>
+    <script src="./js/socket.js"></script>
 
   </head>
 
@@ -50,12 +51,16 @@
 
       <div class="row">
         <h2 class="text-center text-muted"><%= title %></h2>
+
+        <div id="messages">
         <% messages.forEach( function(message){ %>
           <div class="alert alert-warning alert-dismisable" role="alert" id="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
             <p><strong>warning</strong>：<%= message %></p>
           </div>
         <% }) %>
+        </div>
+
         <% for(var i=0; i<50; i++){ %>
           <div class="col-md-3">
             <div class="jumbotron" style="margin: 10px; height: 300px;">
@@ -65,49 +70,5 @@
         <% } %>
       </div>
     </div>
-
-    <script type="text/javascript"> 
-    $(function() {
-      // // var socket = io.connect('ws://' + location.host );
-      //  var socket = io.connect('http://localhost:3000');
-      // socket.on('error', function(reason) {
-      //   console.log(reason);
-      // });
-
-
-      // socket.on('connect', function(msg) {
-      //   console.log("サーバとクライアントでつながりました");
-      //   socket.on('msg', function(msg) { 
-      //     console.log(msg + "がサーバからとどいたよ！！");
-      //     // alert(msg);
-      //   });
-
-      //   socket.emit("init", Date.now());
-      // });
-
-      var socket = io.connect('ws://localhost:3000/search');
-      socket.on('connect', function() {
-        socket.on('hello', function(msg){
-          console.log(msg + "を受診");
-          socket.emit('helloback', 'hellobackokok');
-        });
-        socket.emit('message from client', 'hello asasasasa');
-      });
-      var i = "ab";
-      setInterval( function() {
-        //socket.emit('message from client', i);
-        // i += 'ab';
-
-      }, 1000);
-      socket.emit('message from client', 'hello');
-      socket.on('message from server', function(message){
-        console.log(message);
-      });
-
-
-
-
-    });
-    </script>
   </body>
 </html>

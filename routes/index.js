@@ -3,7 +3,7 @@ var router = express.Router();
 
 // APIを叩くメソッド一覧
 var api = require('../api.js');
-
+var S2C = require('../bin/www');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -14,16 +14,23 @@ var api = require('../api.js');
 // });
 
 
-router.get('/', function(req, res, next) {
-	var address = req.query.address;
+router.post('/', function(req, res, next) {
+	// var address = req.query.address;
+	var address = req.body.address;
+
+	// setTimeout(function() {
+	// 	S2C.Server2Client('sample', 'ksoamzoaksoamsoa');
+
+	// }, 3000);
+
 	if( !address || address == "" ) {
 		res.render('index', {messages: ['住所や郵便番号を入力してください'] , title: '' } );
 		return;
 	}
 
 	api.AddressToLngLon(address, req, res, function(lat, lng) {
-		api.ReverseGeo(lat, lng, function(add) {
-			res.render('search', {messages: [], title: add});
+		api.ReverseGeo(lat, lng, function(japan_address) {
+			res.render('search', {messages: [], title: japan_address});
 		});
 	});
 

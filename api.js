@@ -11,6 +11,9 @@ var flash = require('express-flash');
 var JSONStream = require('JSONStream');
 var es = require('event-stream');
 
+// クライアントに送信するメソッドServer2Clientを持つオブジェクト
+var S2C = require('./bin/www');
+
 
 // 住所(施設、郵便番号)を緯度経度に変換。
 module.exports.AddressToLngLon = function(address, req, res, callback){
@@ -123,6 +126,7 @@ module.exports.Place = function(lat, lng, callback){
 		if( !err && res.statusCode == 200){
 			var places = JSON.parse(body).ResultSet.Result;
 			// console.log(places);
+			jsonQueue.push(places);
 		} else {
 			console.log("We couldn't get Place info"); return;
 		};
