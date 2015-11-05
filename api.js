@@ -13,8 +13,8 @@ var es = require('event-stream');
 
 // クライアントに送信するメソッドServer2Clientを持つオブジェクト
 var S2C = require('./bin/www');
-// このモジュール自身
 var me = require('./api.js');
+var async = require('async');
 
 // 住所(施設、郵便番号)を緯度経度に変換。
 module.exports.AddressToLngLon = function(address, req, res, callback){
@@ -28,14 +28,6 @@ module.exports.AddressToLngLon = function(address, req, res, callback){
 		var formatted_address = data.results[0].formatted_address;
 		var geometry = data.results[0].geometry.location;
 		var lat = geometry.lat, lng = geometry.lng;
-		//console.log(formatted_address);
-		//console.log(geometry);
-		me.Weather(lat, lng);
-		me.BarNavi(lat, lng);
-		me.GNavi(lat, lng);
-		me.Canpas(lat, lng);
-		me.Gourmet(lat, lng);
-		me.Place(lat, lng);
 		callback(lat, lng);
 	});
 };
@@ -51,6 +43,18 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		}
 	});
 
+	// socketがつながるまでループする。
+	async.until(function(){ return S2C.connected; }, function(callback) {
+		setTimeout(callback, 1000);
+		// console.log('まだ繋がってないよ');
+	}, function() {
+		me.Weather(lat, lng);
+		me.BarNavi(lat, lng);
+		me.GNavi(lat, lng);
+		me.Campus(lat, lng);
+		me.Gourmet(lat, lng);
+		me.Place(lat, lng);
+	});
 };
 
 
@@ -73,80 +77,60 @@ module.exports.Weather = function(lat, lng, callback){
 module.exports.BarNavi = function(lat, lng, callback){
 	var barURI = "http://webapi.suntory.co.jp/barnavi/v2/shops?key=" + config.BAR_NAVI.api_key + "&pattern=1&lat=" + lat + "&lng=" + lng;
 	barURI += "&format=json&url=http://localhost:3000";
-	request(barURI, function(err, res, body){
-		if( !err && res.statusCode == 200){
-			var shops = JSON.parse(body).shops.shop;
-			// console.log(shops);
-			S2C.Server2Client('barnavi', shops);
-		} else {
-			console.log("We couldn't get bar info"); return;
-		}
-	});
+
+	request({url: barURI})
+		.pipe(JSONStream.parse('shops.shop.*'))
+		.pipe(es.mapSync( function(data) {
+			S2C.Server2Client('barnavi', data);
+		}));
+
 };
 
 // 緯度経度から近くのレストラン検索 by ぐるなび
 module.exports.GNavi = function(lat, lng, callback){
 	var GNaviURI = "http://api.gnavi.co.jp/RestSearchAPI/20150630/?keyid=" + config.G_NAVI.api_key + "&format=json&latitude=" + lat + "&longitude=" + lng;
-	request(GNaviURI, function(err, res, body){
-		if( !err && res.statusCode == 200){
-			var rests = JSON.parse(body).rest;
-			// console.log(rests);
-			S2C.Server2Client('gnavi', rests);
-		} else {
-			console.log("We couldn't get restaurant info"); return;
-		}
-	});
+
+	request({url: GNaviURI})
+		.pipe(JSONStream.parse('rest.*'))
+		.pipe(es.mapSync( function(data) {
+			S2C.Server2Client('gnavi', data);
+		}));
+
 };
 
 // 緯度経度から近くのキャンパスを検索 by りくなび
-module.exports.Canpas = function(lat, lng, callback){
-	var CanURI = "http://webservice.recruit.co.jp/shingaku/campus/v2/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
-	request(CanURI, function(err, res, body){
-		if( !err && res.statusCode == 200){
-			var canpas = JSON.parse(body).results.campus;
-			// console.log(canpas);
-			S2C.Server2Client('canpas', canpas);
-		} else {
-			console.log("We couldn't get canpas info"); return;
-		}
-	});
+module.exports.Campus = function(lat, lng, callback){
+	var CamURI = "http://webservice.recruit.co.jp/shingaku/campus/v2/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
+
+	request({url: CamURI})
+		.pipe(JSONStream.parse('results.campus.*'))
+		.pipe(es.mapSync( function(data) {
+			//console.log(data);
+			S2C.Server2Client('campus', data);
+		}));
 };
 
 // 緯度経度から近くのグルメを検索 by リクナビ
 module.exports.Gourmet = function(lat, lng, callback){
 	var GourmetURI = "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
-	request(GourmetURI, function(err, res, body){
-		if( !err && res.statusCode == 200){
-			var gourmet = JSON.parse(body).results.shop;
-			// console.log(gourmet);
-			S2C.Server2Client('gourmet', gourmet);
-		} else {
-			console.log("We couldn't get Gourmet info"); return;
-		};
-	});
+
+	request({url: GourmetURI})
+		.pipe(JSONStream.parse('results.shop.*'))
+		.pipe(es.mapSync( function(data) {
+			//console.log(data);
+			S2C.Server2Client('gourmet', data);
+		}));
 };
 
 module.exports.Place = function(lat, lng, callback){
 	var PlaceURI = "http://placeinfo.olp.yahooapis.jp/V1/get?output=json&lat=" + lat + "&lon=" + lng + "&appid=" + config.Yahoo.appid;
-	request(PlaceURI, function(err, res, body){
-		if( !err && res.statusCode == 200){
-			var places = JSON.parse(body).ResultSet.Result;
-			// console.log(places);
-			S2C.Server2Client('place', places);
-		} else {
-			console.log("We couldn't get Place info"); return;
-		};
-	});
 
 	request({url: PlaceURI})
 		.pipe(JSONStream.parse('ResultSet.Result.*'))
 		.pipe(es.mapSync( function(data) {
 			//console.log(data);
-			//console.log('ok');
-
-			// return data;
+			S2C.Server2Client('place', data);
 		}));
-
 };
 
 /*
