@@ -50,3 +50,7 @@ img.here:before { padding: 0; line-height: 50px; }
 a.here:hover img { background: #e1daba; }
 a.here:active img { opacity: .8; }
 
+div.willdo {
+  margin: 10px; 
+  height: 300px;
+}

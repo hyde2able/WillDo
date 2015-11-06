@@ -45,14 +45,14 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 
 	// socketがつながるまでループする。
 	async.until(function(){ return S2C.connected; }, function(callback) {
-		setTimeout(callback, 1000);
+		setTimeout(callback, 500);
 		// console.log('まだ繋がってないよ');
 	}, function() {
-		me.Weather(lat, lng);
-		me.BarNavi(lat, lng);
-		me.GNavi(lat, lng);
-		me.Campus(lat, lng);
-		me.Gourmet(lat, lng);
+		//me.Weather(lat, lng);
+		//me.BarNavi(lat, lng);
+		//me.GNavi(lat, lng);
+		//me.Campus(lat, lng);
+		//me.Gourmet(lat, lng);
 		me.Place(lat, lng);
 	});
 };
@@ -145,3 +145,4 @@ module.exports.Place = function(lat, lng, callback){
 			- グルメ検索API リクナビ　http://webservice.recruit.co.jp/hotpepper/reference.html
 
 */
+
