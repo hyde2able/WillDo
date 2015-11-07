@@ -14,7 +14,6 @@ var es = require('event-stream');
 // クライアントに送信するメソッドServer2Clientを持つオブジェクト
 var S2C = require('./bin/www');
 var me = require('./api.js');
-var async = require('async');
 
 // 住所(施設、郵便番号)を緯度経度に変換。
 module.exports.AddressToLngLon = function(address, req, res, callback){
@@ -43,19 +42,14 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		}
 	});
 
-	// socketがつながるまでループする。
-	async.until(function(){ return S2C.connected; }, function(callback) {
-		setTimeout(callback, 500);
-		// console.log('まだ繋がってないよ');
-	}, function() {
+
 		//me.Weather(lat, lng);
 		//me.BarNavi(lat, lng);
 		//me.GNavi(lat, lng);
 		//me.Campus(lat, lng);
-		//me.Gourmet(lat, lng);
+		me.Gourmet(lat, lng);
 		//me.Place(lat, lng);
-		me.FourSquare(lat, lng);
-	});
+		//me.FourSquare(lat, lng);
 };
 
 
@@ -137,9 +131,16 @@ module.exports.Place = function(lat, lng, callback){
 
 // 緯度経度からいろいろな施設？を検索する by FourSquare
 module.exports.FourSquare = function(lat, lng, callback) {
-	var FourURI = "https://api.foursquare.com/v2/venues/search?ll=" + lat + "," + lng + "&limit=50";
-	console.log(FourURI);
+  	var FourURI = "https://api.foursquare.com/v2/venues/search?client_id=" + config.FourSquare.client_id + "&client_secret=" + config.FourSquare.client_key;
+  	FourURI += "&v=20130815&ll=" + lat + "," + lng + "&limit=50&locale=ja&m=swarm&radius=2000&intent=checkin";
 
+  	request({url: FourURI})
+		.pipe(JSONStream.parse('response.venues.*'))
+		.pipe(es.mapSync( function(data) {
+			//console.log(data);
+			console.log(data);
+			S2C.Server2Client('foursquare', data);
+		}));
 };
 
 /*
@@ -152,6 +153,6 @@ module.exports.FourSquare = function(lat, lng, callback) {
 			- ぐるなび  http://api.gnavi.co.jp/api/manual/restsearch/
 			- キャンパス検索API リクナビ　http://webservice.recruit.co.jp/shingaku/reference-v2.html#2
 			- グルメ検索API リクナビ　http://webservice.recruit.co.jp/hotpepper/reference.html
-
+			- FourSquare https://developer.foursquare.com/docs/explore#req=venues/search%3Fll%3D40.7,-74
 */
 

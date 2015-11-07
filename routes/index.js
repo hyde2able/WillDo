@@ -25,7 +25,6 @@ router.post('/', function(req, res, next) {
 		res.render('index', {messages: ['住所や郵便番号を入力してください'] , title: '' } );
 		return;
 	}
-
 	api.AddressToLngLon(address, req, res, function(lat, lng) {
 		api.ReverseGeo(lat, lng, function(japan_address) {
 			res.render('search', {messages: [], title: japan_address});
