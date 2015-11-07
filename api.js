@@ -53,7 +53,8 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		//me.GNavi(lat, lng);
 		//me.Campus(lat, lng);
 		//me.Gourmet(lat, lng);
-		me.Place(lat, lng);
+		//me.Place(lat, lng);
+		me.FourSquare(lat, lng);
 	});
 };
 
@@ -122,6 +123,7 @@ module.exports.Gourmet = function(lat, lng, callback){
 		}));
 };
 
+// 緯度経度から近くの場所を検索 by Yahoo
 module.exports.Place = function(lat, lng, callback){
 	var PlaceURI = "http://placeinfo.olp.yahooapis.jp/V1/get?output=json&lat=" + lat + "&lon=" + lng + "&appid=" + config.Yahoo.appid;
 
@@ -131,6 +133,13 @@ module.exports.Place = function(lat, lng, callback){
 			//console.log(data);
 			S2C.Server2Client('place', data);
 		}));
+};
+
+// 緯度経度からいろいろな施設？を検索する by FourSquare
+module.exports.FourSquare = function(lat, lng, callback) {
+	var FourURI = "https://api.foursquare.com/v2/venues/search?ll=" + lat + "," + lng + "&limit=50";
+	console.log(FourURI);
+
 };
 
 /*
