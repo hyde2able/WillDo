@@ -1,6 +1,13 @@
 // クライアント側のsocket
 $(function(){
 
+	// 渡したオブジェクトや変数などが空かをTorFで判定する
+	function empty(obj) {
+		if( !obj ) { return true; } // undefined　か　null　か　空文字列　か　０　かどうか
+		if( (obj instanceof Object) && !(obj.length > 0) ) { return true; } // objectが配列かハッシュで長さが0以下なら空
+		return false;
+	};
+
 	// 受け取ったJSONを元に専用のwilldoを生成するメソッド
 	function createWillDo(hash, cb) {
 		var content = '<div class="caption">';
@@ -12,13 +19,16 @@ $(function(){
 		});
 
 		for(type in hash) {
+			if( empty(hash[type]) ){ continue; } //中身が空ならスキップ
 			switch(type){
 				case "image":
 					content += '<img alt="' + hash.name + '" class="img-thumbnail text-center" src="' + hash[type] + '" />'; break;
 				case "lat": case "lng":
 					$willdo.attr(type, hash[type]); break;
+				case "name":
+					content += '<h2>' + hash[type] + '</h2>'; break;
 				case "url":
-					content += '<a href="' + hash[type] + '" target="_blank" >URLだよん</a>';
+					content += '<a href="' + hash[type] + '" target="_blank" >URLだよん</a>'; break;
 				default:
 					content += '<p class="' + type + '">' + hash[type] + '</p>'; break;
 			}
@@ -49,6 +59,17 @@ $(function(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 	/*
 		クライアント側のsocket.ioの受信設定。
 	*/
@@ -75,7 +96,8 @@ $(function(){
 			address: json.address,
 			open: json.open,
 			budget: json.budget,
-			url: json.url_pc,
+			url_pc: json.url_pc,
+			url_mobile: json.url_mobile,
 			access: json.access,
 			genre: json.type
 		}
@@ -89,21 +111,24 @@ $(function(){
 	// BarNaviのjsonを受け取る
 	socket.on('gnavi', function(json) {
 		var willdo = {
-			image: json.photo.pc.l,
 			name: json.name,
-			lat: json.lat,
-			lng: json.lng,
+			lat: json.latitude,
+			lng: json.longitude,
+			url_pc: json.url,
+			url_mobile: json.url_mobile,
 			address: json.address,
-			open: json.open,
-			budget: json.budget.average,
-			url: json.urls.pc,
-			access: json.mobile_access,
-			genre: json.genre.name + "(" + json.genre.catch + ")"
+			tel: json.tel,
+			genre: json.category,
+			open: json.opentime,
+			pr_short: json.pr.pr_short,
+			pr_long: json.pr.pr_long,
+			budget: json.budget,
+			image: json.image_url.shop_image1,
+			access: json.access.line + json.access.station + json.access.station_exit + json.access.walk
 		};
-		console.log(JSON.stringify(willdo));
-		// createWillDo(willdo, function($willdo) {
-		// 	addWillDo($willdo);
-		// });
+		createWillDo(willdo, function($willdo) {
+			addWillDo($willdo);
+		});
 	});
 
 	// BarNaviのjsonを受け取る
