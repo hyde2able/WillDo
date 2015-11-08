@@ -41,12 +41,6 @@ $(function(){
 	};
 
 
-
-	// willdoをクリックしたらそこまでの道のりを検索して表示
-	function SearchRoot() {
-
-	};
-
 	$(document).on("click", "#willdo", (function(){
     	var lat = $(this).attr('lat'),
     		lng = $(this).attr('lng');
@@ -54,8 +48,12 @@ $(function(){
 	}));
 
 
+
+	/*
+		クライアント側のsocket.ioの受信設定。
+	*/
+
 	var socket = io.connect();
-	// socket.emit('sample', )
 
 	socket.on('connect', function() {
 
@@ -70,7 +68,22 @@ $(function(){
 
 	// BarNaviのjsonを受け取る
 	socket.on('barnavi', function(json) {
-		$('#willdos').append('<h1>BAR</h1><p>' + JSON.stringify(json) + '</p>');
+		var willdo = {
+			name: json.name,
+			lat: json.lat_world,
+			lng: json.lng_world,
+			address: json.address,
+			open: json.open,
+			budget: json.budget,
+			url: json.url_pc,
+			access: json.access,
+			genre: json.type
+		}
+		if(json.url_photo_l1){ willdo.image = json.url_photo_l1; }
+		createWillDo(willdo, function($willdo) {
+			addWillDo($willdo);
+		});
+
 	});
 
 	// BarNaviのjsonを受け取る

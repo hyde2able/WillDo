@@ -10,23 +10,6 @@ $(function(){
  		});
   }, 3000);
 
-
-  	// // ここでクリックを検知して画面遷移せず　Ajax　で表示できるように？
-  	// $('#search-btn').click( function() {
-  	// 	var address = $(this).closest("#address").val();
-  	// 	socket.emit("message", address + 'を入力したよ');
-  	// });
-
-
-  	// // イベントとコールバックの定義
-  	// var socket = io.connect();
-  	// socket.on('connect', function() {
-  	// 	console.log('つながったよーこれはクライアント側');
-  	// 	socket.on('message', function(message) {
-  	// 		console.log(message + "を受診したよ。クライアント側");
-  	// 	});
-  	// });
-
   // 現在地取得できるなら、取得アイコンを挿入
   if( navigator.geolocation ){
     $('#here-block').append('<a class="here" id="here"><img src="../images/here.png" class="here"></a>');
@@ -41,7 +24,6 @@ $(function(){
 
   // 現在地取得アイコンをクリックすると現在地を取得する
   $('#here').click( function() {
-    // navigator.geolocation.getCurrentPosition(is_success, is_error);
     navigator.geolocation.watchPosition(is_success, is_error, options);
   });
 
@@ -51,7 +33,7 @@ $(function(){
     var lng = position.coords.longitude;
     var geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(lat,lng);
-    $("input[id='address main']").val(latlng);
+    $("input[id='address']").val(latlng);
 
     geocoder.geocode({'latLng': latlng}, function(results, status) {
       if( status == google.maps.GeocoderStatus.OK) {

@@ -13,7 +13,7 @@ var api = require('../api.js');
 // });
 
 router.get('/', function(req, res, next) {
-	res.render('index', {messages: [], title: '' } );
+	res.render('index', {messages: [] } );
 	return;
 });
 
