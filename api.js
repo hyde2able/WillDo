@@ -44,12 +44,12 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 
 
 		//me.Weather(lat, lng);
-		//me.BarNavi(lat, lng);
+		me.BarNavi(lat, lng);
 		me.GNavi(lat, lng);
 		//me.Campus(lat, lng);
-		//me.Gourmet(lat, lng);
+		me.Gourmet(lat, lng);
 		//me.Place(lat, lng);
-		//me.FourSquare(lat, lng);
+		me.FourSquare(lat, lng);
 };
 
 

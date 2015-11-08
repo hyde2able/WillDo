@@ -10,6 +10,14 @@ $(function(){
  		});
   }, 3000);
 
+
+  // 例をクリックするとそれを検索部分にコピー
+  $('span#example').click( function() {
+    //$("input[id='address']").val(this.text(););
+    $("#address").val($(this).text());
+
+  });
+
   // 現在地取得できるなら、取得アイコンを挿入
   if( navigator.geolocation ){
     $('#here-block').append('<a class="here" id="here"><img src="../images/here.png" class="here"></a>');
