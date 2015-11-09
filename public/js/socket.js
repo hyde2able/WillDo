@@ -190,4 +190,22 @@ $(function(){
 		});
 	});
 
+	// Salonのjsonを受け取る
+	socket.on('salon', function(json) {
+		var willdo = {
+			name: json.name,
+			image: json.main.photo[0].l,
+			lat: json.lat,
+			lng: json.lng,
+			open: json.open,
+			address: json.address,
+			pr_short: json.catch_copy,
+			pr_long: json.description || json.note,
+			access: json.access
+		};
+		createWillDo(willdo, function($willdo) {
+			addWillDo($willdo);
+		});
+	});
+
 });

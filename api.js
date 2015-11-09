@@ -52,15 +52,14 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		}
 	});
 
-
 		//Weather(lat, lng);
 		//BarNavi(lat, lng);
-		GNavi(lat, lng);
+		//GNavi(lat, lng);
 		//Campus(lat, lng);
 		//Gourmet(lat, lng);
 		//Place(lat, lng);
 		//FourSquare(lat, lng);
-		//Salon(lat, lng);
+		Salon(lat, lng);
 		//Hotel(lat, lng);
 };
 
