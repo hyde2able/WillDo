@@ -61,8 +61,8 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		//Place(lat, lng);
 		//FourSquare(lat, lng);
 		//Salon(lat, lng);
-		Relax(lat, lng);
-		//Travel(lat, lng);
+		//Relax(lat, lng);
+		Travel(lat, lng);
 		//Hotel(lat, lng);
 };
 
@@ -148,7 +148,6 @@ var Travel = function(lat, lng) {
 	TravelURI += "&latitude=" + lat + "&longitude=" + lng + "&searchRadius=2&datumType=1";
 
 	emitJSON(TravelURI, 'hotels.*', 'travel');
-
 };
 
 // 県のエリアコードから温泉を検索する by じゃらん
@@ -178,7 +177,7 @@ var Hotel = function(lat, lng) {
 			- グルメ検索API リクナビ　http://webservice.recruit.co.jp/hotpepper/reference.html
 			- FourSquare https://developer.foursquare.com/docs/explore#req=venues/search%3Fll%3D40.7,-74
 			- サロン検索　りくなび　http://webservice.recruit.co.jp/beauty/reference.html#a1to
-			- リラウゼーション検索　りくなび　http://webservice.recruit.co.jp/relax/salon/v1/
+			- リラクゼーション検索　りくなび　http://webservice.recruit.co.jp/relax/salon/v1/
 			- トラベル施設検索　楽天　https://webservice.rakuten.co.jp/api/simplehotelsearch/
 			- 温泉検索　じゃらん　http://www.jalan.net/jw/jwp0100/jww0104.do
 			- 宿泊地検索　じゃらん	http://www.jalan.net/jw/jwp0100/jww0102.do

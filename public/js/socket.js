@@ -226,4 +226,24 @@ $(function(){
 		});
 	});
 
+	// travelのjsonを受け取る
+	socket.on('travel', function(json) {
+		json = json.hotel[0].hotelBasicInfo;
+		var willdo = {
+			name: json.hotelName,
+			image: json.hotelThumbnailUrl,
+			pr_short: json.hotelSpecial,
+			budget: json.hotelMinCharge + "~",
+			lat: json.latitude,
+			lng: json.longitude,
+			tel: json.telephoneNo,
+			address: json.address1 + json.address2,
+			access: json.access
+		};
+		createWillDo(willdo, function($willdo) {
+			addWillDo($willdo);
+		});
+
+	});
+
 });
