@@ -20,6 +20,7 @@ var emitJSON = function(url, format, dataName) {
 	request({url: url})
 		.pipe(JSONStream.parse(format))
 		.pipe(es.mapSync( function(data) {
+			//console.log(data);
 			S2C.Server2Client(dataName, data);
 		}));
 };
@@ -59,7 +60,9 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		//Gourmet(lat, lng);
 		//Place(lat, lng);
 		//FourSquare(lat, lng);
-		Salon(lat, lng);
+		//Salon(lat, lng);
+		Relax(lat, lng);
+		//Travel(lat, lng);
 		//Hotel(lat, lng);
 };
 
@@ -127,9 +130,25 @@ var FourSquare = function(lat, lng) {
 var Salon = function(lat, lng) {
 	var SalonURI = "http://webservice.recruit.co.jp/beauty/salon/v1/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng ;
 	SalonURI += "&format=json&range=4&count=10";
-	console.log(SalonURI);
 
 	emitJSON(SalonURI, 'results.salon.*', 'salon');
+};
+
+// 緯度経度からリレクッス＆ビューティーサロンを検索 by りくなび
+var Relax = function(lat, lng) {
+	var RelaxURI = "http://webservice.recruit.co.jp/relax/salon/v1/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng;
+	RelaxURI += "&format=json&range=4&count=10";
+
+	emitJSON(RelaxURI, 'results.salon.*', 'relax');
+};
+
+// 緯度経度からトラベル施設を検索 by らくてん
+var Travel = function(lat, lng) {
+	var TravelURI = "https://app.rakuten.co.jp/services/api/Travel/SimpleHotelSearch/20131024?applicationId=" + config.Rakuten.appid + "&format=json";
+	TravelURI += "&latitude=" + lat + "&longitude=" + lng + "&searchRadius=2&datumType=1";
+
+	emitJSON(TravelURI, 'hotels.*', 'travel');
+
 };
 
 // 県のエリアコードから温泉を検索する by じゃらん
@@ -158,6 +177,9 @@ var Hotel = function(lat, lng) {
 			- キャンパス検索API リクナビ　http://webservice.recruit.co.jp/shingaku/reference-v2.html#2
 			- グルメ検索API リクナビ　http://webservice.recruit.co.jp/hotpepper/reference.html
 			- FourSquare https://developer.foursquare.com/docs/explore#req=venues/search%3Fll%3D40.7,-74
+			- サロン検索　りくなび　http://webservice.recruit.co.jp/beauty/reference.html#a1to
+			- リラウゼーション検索　りくなび　http://webservice.recruit.co.jp/relax/salon/v1/
+			- トラベル施設検索　楽天　https://webservice.rakuten.co.jp/api/simplehotelsearch/
 			- 温泉検索　じゃらん　http://www.jalan.net/jw/jwp0100/jww0104.do
 			- 宿泊地検索　じゃらん	http://www.jalan.net/jw/jwp0100/jww0102.do
 
