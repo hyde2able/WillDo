@@ -13,9 +13,7 @@ $(function(){
 
   // 例をクリックするとそれを検索部分にコピー
   $('span#example').click( function() {
-    //$("input[id='address']").val(this.text(););
     $("#address").val($(this).text());
-
   });
 
   // 現在地取得できるなら、取得アイコンを挿入

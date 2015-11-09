@@ -13,7 +13,17 @@ var es = require('event-stream');
 
 // クライアントに送信するメソッドServer2Clientを持つオブジェクト
 var S2C = require('./bin/www');
-var me = require('./api.js');
+
+
+// 指定したURLのapiを叩いて、帰って来たJSONのformatに合わせてストリーミングで取得したdataをdataNameという名前でエミットする。
+var emitJSON = function(url, format, dataName) {
+	request({url: url})
+		.pipe(JSONStream.parse(format))
+		.pipe(es.mapSync( function(data) {
+			S2C.Server2Client(dataName, data);
+		}));
+};
+
 
 // 住所(施設、郵便番号)を緯度経度に変換。
 module.exports.AddressToLngLon = function(address, req, res, callback){
@@ -43,18 +53,20 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 	});
 
 
-		//me.Weather(lat, lng);
-		me.BarNavi(lat, lng);
-		me.GNavi(lat, lng);
-		//me.Campus(lat, lng);
-		me.Gourmet(lat, lng);
-		//me.Place(lat, lng);
-		me.FourSquare(lat, lng);
+		//Weather(lat, lng);
+		//BarNavi(lat, lng);
+		GNavi(lat, lng);
+		//Campus(lat, lng);
+		//Gourmet(lat, lng);
+		//Place(lat, lng);
+		//FourSquare(lat, lng);
+		//Salon(lat, lng);
+		//Hotel(lat, lng);
 };
 
 
 // 緯度経度からその地点の天気情報を取得 by Yahoo
-module.exports.Weather = function(lat, lng, callback){
+var Weather = function(lat, lng){
 	// Yahooは24時間あたり50000リクエストが上限
 	var weatherURI = "http://weather.olp.yahooapis.jp/v1/place?coordinates=" + lng + "," + lat + "&output=json&appid=" + config.Yahoo.appid;
 	request(weatherURI, function(err, res, body){
@@ -69,78 +81,71 @@ module.exports.Weather = function(lat, lng, callback){
 };
 
 // 緯度経度から近くのバーを検索する by BAR-NAVI
-module.exports.BarNavi = function(lat, lng, callback){
+var BarNavi = function(lat, lng){
 	var barURI = "http://webapi.suntory.co.jp/barnavi/v2/shops?key=" + config.BAR_NAVI.api_key + "&pattern=1&lat=" + lat + "&lng=" + lng;
 	barURI += "&format=json&url=http://localhost:3000";
 
-	request({url: barURI})
-		.pipe(JSONStream.parse('shops.shop.*'))
-		.pipe(es.mapSync( function(data) {
-			S2C.Server2Client('barnavi', data);
-		}));
-
+	emitJSON(barURI, 'shops.shop.*', 'barnavi');
 };
 
 // 緯度経度から近くのレストラン検索 by ぐるなび
-module.exports.GNavi = function(lat, lng, callback){
+var GNavi = function(lat, lng){
 	var GNaviURI = "http://api.gnavi.co.jp/RestSearchAPI/20150630/?keyid=" + config.G_NAVI.api_key + "&format=json&latitude=" + lat + "&longitude=" + lng;
 
-	request({url: GNaviURI})
-		.pipe(JSONStream.parse('rest.*'))
-		.pipe(es.mapSync( function(data) {
-			S2C.Server2Client('gnavi', data);
-		}));
-
+	emitJSON(GNaviURI, 'rest.*', 'gnavi');
 };
 
 // 緯度経度から近くのキャンパスを検索 by りくなび
-module.exports.Campus = function(lat, lng, callback){
+var Campus = function(lat, lng){
 	var CamURI = "http://webservice.recruit.co.jp/shingaku/campus/v2/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
 
-	request({url: CamURI})
-		.pipe(JSONStream.parse('results.campus.*'))
-		.pipe(es.mapSync( function(data) {
-			//console.log(data);
-			S2C.Server2Client('campus', data);
-		}));
+	emitJSON(CamURI, 'results.campus.*', 'campus');
 };
 
 // 緯度経度から近くのグルメを検索 by リクナビ
-module.exports.Gourmet = function(lat, lng, callback){
+var Gourmet = function(lat, lng){
 	var GourmetURI = "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng + "&format=json";
 
-	request({url: GourmetURI})
-		.pipe(JSONStream.parse('results.shop.*'))
-		.pipe(es.mapSync( function(data) {
-			//console.log(data);
-			S2C.Server2Client('gourmet', data);
-		}));
+	emitJSON(GourmetURI, 'results.shops.*', 'gourmet');
 };
 
 // 緯度経度から近くの場所を検索 by Yahoo
-module.exports.Place = function(lat, lng, callback){
+var Place = function(lat, lng){
 	var PlaceURI = "http://placeinfo.olp.yahooapis.jp/V1/get?output=json&lat=" + lat + "&lon=" + lng + "&appid=" + config.Yahoo.appid;
 
-	request({url: PlaceURI})
-		.pipe(JSONStream.parse('ResultSet.Result.*'))
-		.pipe(es.mapSync( function(data) {
-			//console.log(data);
-			S2C.Server2Client('place', data);
-		}));
+	emitJSON(PlaceURI, 'ResultSet,Result.*', 'place');
 };
 
 // 緯度経度からいろいろな施設？を検索する by FourSquare
-module.exports.FourSquare = function(lat, lng, callback) {
+var FourSquare = function(lat, lng) {
   	var FourURI = "https://api.foursquare.com/v2/venues/search?client_id=" + config.FourSquare.client_id + "&client_secret=" + config.FourSquare.client_key;
   	FourURI += "&v=20130815&ll=" + lat + "," + lng + "&limit=50&locale=ja&m=swarm&radius=2000&intent=checkin";
 
-  	request({url: FourURI})
-		.pipe(JSONStream.parse('response.venues.*'))
-		.pipe(es.mapSync( function(data) {
-			//console.log(data);
-			console.log(data);
-			S2C.Server2Client('foursquare', data);
-		}));
+  	emitJSON(FourURI, 'response.venues.*', foursquare);
+};
+
+// 緯度経度からサロンを検索 by りくなび
+var Salon = function(lat, lng) {
+	var SalonURI = "http://webservice.recruit.co.jp/beauty/salon/v1/?key=" + config.RECRUIT.api_key + "&lat=" + lat + "&lng=" + lng ;
+	SalonURI += "&format=json&range=4&count=10";
+	console.log(SalonURI);
+
+	emitJSON(SalonURI, 'results.salon.*', 'salon');
+};
+
+// 県のエリアコードから温泉を検索する by じゃらん
+var Onsen = function(area) {
+	var OunsenURI = "http://jws.jalan.net/APICommon/OnsenSearch/V1/?key=" + config.Jalan.api_key + "&count=20&l_area=" + area;
+	console.log(OnsenURI);
+	// area はgeocoderで取得した県の名前からサーチする。
+
+};
+
+// 緯度経度から宿泊地を検索 by じゃらん
+var Hotel = function(lat, lng) {
+	var HotelURI = "http://jws.jalan.net/APIAdvance/HotelSearch/V1/?key=" + config.Jalan.api_key + "&x=" + lat + "&y=" + lng + "&range=10&count=10"
+	console.log(HotelURI);
+	// 緯度経度がうまく設定できていないみたい
 };
 
 /*
@@ -154,5 +159,8 @@ module.exports.FourSquare = function(lat, lng, callback) {
 			- キャンパス検索API リクナビ　http://webservice.recruit.co.jp/shingaku/reference-v2.html#2
 			- グルメ検索API リクナビ　http://webservice.recruit.co.jp/hotpepper/reference.html
 			- FourSquare https://developer.foursquare.com/docs/explore#req=venues/search%3Fll%3D40.7,-74
+			- 温泉検索　じゃらん　http://www.jalan.net/jw/jwp0100/jww0104.do
+			- 宿泊地検索　じゃらん	http://www.jalan.net/jw/jwp0100/jww0102.do
+
 */
 
