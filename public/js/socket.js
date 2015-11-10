@@ -51,12 +51,6 @@ $(function(){
 	};
 
 
-	$(document).on("click", "#willdo", (function(){
-    	var lat = $(this).attr('lat'),
-    		lng = $(this).attr('lng');
-
-	}));
-
 
 
 
