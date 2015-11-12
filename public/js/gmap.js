@@ -22,7 +22,7 @@ $(function() {
 	/* 地図の初期化  */
 	function  initialize() {
 		var myOptions = {
-			zoom: 15,
+			zoom: 18,
 			center: StartLatLng,
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			scaleControl: true
@@ -39,7 +39,7 @@ $(function() {
 			"draggable": true
 		});
 		directionsDisplay.suppressMarkers = true; 
-		var originMarker = CreateMarker( StartLatLng ); 
+		// var originMarker = CreateMarker( StartLatLng ); 
 		/* 右カラムにルート表示 */
 		// directionsDisplay.setPanel( document.getElementById('directions_panel') );
 
@@ -57,25 +57,6 @@ $(function() {
     	return marker;
     };
 
- 
-        // // 現在のマーカー位置でルートを更新します。 
-        // function UpdateRoute() 
-        // { 
-        //     var request = { 
-        //         origin: originMarker.getPosition(), 
-        //         destination: destinationMarker.getPosition(), 
-        //         travelMode: google.maps.DirectionsTravelMode.DRIVING 
-        //     }; 
-        //     directionsService.route(request, function(result, status) 
-        //     { 
-        //         if (status == google.maps.DirectionsStatus.OK) 
-        //         { 
-        //             directionsRenderer.setDirections(result); 
-        //             SetDistance(result); 
-        //         } 
-        //     }); 
-        // } 
-
 	/* ルート検索 */
 	function searchRoute(lat, lng) {
 		var EndLatLng = new google.maps.LatLng( parseFloat(lat), parseFloat(lng) );
@@ -89,7 +70,7 @@ $(function() {
 			avoidHighways: true,		// 高速道路は使わない
 			avoidTolls: true			// 有料道路は使わない
 		};
-		var distinationMarker = CreateMarker( EndLatLng ); 
+		// var distinationMarker = CreateMarker( EndLatLng ); 
 
 		// ルート描画
 		directionsService.route(request, function(response, status) {
