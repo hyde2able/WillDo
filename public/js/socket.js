@@ -34,24 +34,47 @@ $(function(){
 			addClass: 'willdo col-md-3 col-sm-6 col-xs-10'
 		});
 
-		for(attr in data) {
-			if( empty(data[attr]) ){ continue; } //中身が空ならスキップ
-			switch(attr){
+		for(attr in data.basic) {
+			if( empty(data.basic[attr]) ){ continue; }	// 中身が空ならスキップ
+			switch(attr) {
 				case "image":
-					content += '<img alt="' + data.name + '" id="thumbnail" class="thumb" src="' + data[attr] + '" />'; 
+					content += '<img alt="' + data.basic.name + '" id="thumbnail" class="thumb" src="' + data.basic[attr] + '" />'; 
 					content += '<img class="plus" id="plus" src="images/append.png" width="30" height="30" /> ';
 					break;
 				case "name":
-					content += '<b class="name">' + appropriate(data[attr]) + '</b>'; break;
+					content += '<a href="' + data.basic.url + '" target="_blank" class="name" >'
+					content += '<strong class="name">' + appropriate(data.basic[attr]) + '</strong>'; 
+					content += '</a>'; break;
 				case "lat": case "lng":
-					$willdo.attr(attr, data[attr]); break;
-				case "url":
-					content += '<a href="' + data[attr].pc + '" target="_blank" >URLだよん</a>'; break;
+					$willdo.attr(attr, data.basic[attr]); break;
+				case "pr_short":
+					content += '<p class="pr">' + data.basic[attr] + '</p>'; break;
 				default:
-					content += '<p class="' + attr + '">' + data[attr] + '</p>'; break;
+					content += '<p class="' + attr + '">' + data.basic[attr] + '</p>'; break;
 			}
 		}
-		content += '<p><a class="btn btn-primary" href="#">Action</a></p>';
+
+		content += '<img src="images/more.png" id="more" class="more" width="30" height="30" />';
+		content += '<div id="details" class="details" style="display: none;">';
+
+		for(attr in data.details) {
+			if( empty(data.details[attr]) ){ continue; }	// 中身が空ならスキップ
+			switch(attr) {
+				case "address":
+					content += '<p class="address"> 住所:' + data.details[attr] + '</p>'; break;
+				case "access":
+					content += '<p class="access"> アクセス:' + data.details[attr] + '</p>'; break;
+				case "pr_long":
+					content += '<p class="detail"> ' + data.details[attr] + '</p>'; break;
+				case "tel":
+					content += '<p class="tel"> 連絡先:' + data.details[attr] + '</p>'; break;
+				default:
+					break;
+			}
+		}
+		content += '<img src="images/nomore.png" id="nomore" class="nomore" width="30" height="30" />';
+		content += '</div>';
+
 
 		$('<div></div>', {
 			addClass: 'inner',
@@ -125,20 +148,23 @@ $(function(){
 	// BarNaviのjsonを受け取る
 	socket.on('gnavi', function(json) {
 		var willdo = {
-			image: json.image_url.shop_image1,
-			name: json.name,
-			lat: json.latitude,
-			lng: json.longitude,
-			pr_short: json.pr.pr_short,
-			budget: json.budget,
-			genre: json.category,
-			open: json.opentime,
-
-			address: json.address,
-			access: json.access.line + json.access.station + json.access.station_exit + json.access.walk,
-			pr_long: json.pr.pr_long,
-			url: {pc: json.url, mobile: json.url_mobile},
-			tel: json.tel
+			basic: {
+				image: json.image_url.shop_image1,
+				name: json.name,
+				lat: json.latitude,
+				lng: json.longitude,
+				pr_short: json.pr.pr_short,
+				budget: json.budget,
+				genre: json.category,
+				open: json.opentime
+			},
+			details: {	
+				address: json.address,
+				access: json.access.line + json.access.station + json.access.station_exit + json.access.walk,
+				pr_long: json.pr.pr_long,
+				url: {pc: json.url, mobile: json.url_mobile},
+				tel: json.tel
+			}
 		};
 		createWillDo(willdo, function($willdo) {
 			addWillDo($willdo);
@@ -153,17 +179,20 @@ $(function(){
 	// BarNaviのjsonを受け取る
 	socket.on('gourmet', function(json) {
 		var willdo = {
-			image: json.photo.pc.l,
-			name: json.name,
-			lat: json.lat,
-			lng: json.lng,
-			budget: json.budget.average,
-			genre: json.genre.name + "(" + json.genre.catch + ")",
-			open: json.open,
-
-			address: json.address,
-			access: json.mobile_access,
-			url: {pc: json.urls.pc, mobile: ''} 
+			basic: {
+				image: json.photo.pc.l,
+				name: json.name,
+				lat: json.lat,
+				lng: json.lng,
+				budget: json.budget.average,
+				genre: json.genre.name + "(" + json.genre.catch + ")",
+				open: json.open
+			},
+			details: {
+				address: json.address,
+				access: json.mobile_access,
+				url: {pc: json.urls.pc, mobile: ''}
+			} 
 		};
 
 		createWillDo(willdo, function($willdo) {
@@ -208,16 +237,19 @@ $(function(){
 	// Salonのjsonを受け取る
 	socket.on('salon', function(json) {
 		var willdo = {
-			image: json.main.photo[0].l,
-			name: json.name,
-			lat: json.lat,
-			lng: json.lng,
-			pr_short: json.catch_copy,
-			open: json.open,
-
-			address: json.address,
-			access: json.access,
-			pr_long: json.description || json.note
+			basic: {
+				image: json.main.photo[0].l,
+				name: json.name,
+				lat: json.lat,
+				lng: json.lng,
+				pr_short: json.catch_copy,
+				open: json.open
+			},
+			details: {
+				address: json.address,
+				access: json.access,
+				pr_long: json.description || json.note
+			}
 		};
 		createWillDo(willdo, function($willdo) {
 			addWillDo($willdo);
@@ -227,15 +259,19 @@ $(function(){
 	// Relaxのjsonを受け取る
 	socket.on('relax', function(json) {
 		var willdo = {
-			image: json.main.photo[0].l,
-			name: json.name,
-			lat: json.lat,
-			lng: json.lng,
-			open: json.open,
-			pr_short: json.catch_copy,
-			address: json.address,
-			access: json.access,
-			pr_long: json.description || json.note
+			basic: {
+				image: json.main.photo[0].l,
+				name: json.name,
+				lat: json.lat,
+				lng: json.lng,
+				pr_short: json.catch_copy,
+				open: json.open
+			},
+			details: {
+				address: json.address,
+				access: json.access,
+				pr_long: json.description || json.note
+			}
 		};
 		createWillDo(willdo, function($willdo) {
 			addWillDo($willdo);
@@ -246,15 +282,19 @@ $(function(){
 	socket.on('travel', function(json) {
 		json = json.hotel[0].hotelBasicInfo;
 		var willdo = {
-			image: json.hotelThumbnailUrl,
-			name: json.hotelName,
-			pr_short: json.hotelSpecial,
-			budget: json.hotelMinCharge + "~",
-			lat: json.latitude,
-			lng: json.longitude,
-			address: json.address1 + json.address2,
-			access: json.access,
-			tel: json.telephoneNo
+			basic: {
+				image: json.hotelThumbnailUrl,
+				name: json.hotelName,
+				lat: json.latitude,
+				lng: json.longitude,
+				pr_short: json.hotelSpecial,
+				budget: json.hotelMinCharge + "~"
+			}, 
+			details: {
+				address: json.address1 + json.address2,
+				access: json.access,
+				tel: json.telephoneNo
+			}
 		};
 		createWillDo(willdo, function($willdo) {
 			addWillDo($willdo);

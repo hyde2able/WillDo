@@ -73,7 +73,7 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 .willdo {
   padding: 15px;
   margin-bottom: 20px;
-  border-right: 1px dotted black;
+  // border-right: 1px dotted black;
 }
 .willdo .thumb{
   width: 100%;
@@ -85,6 +85,15 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
   border-radius: 10px;
   padding: 5px;
 }
+.willdo .inner a, .willdo .inner p, .willdo .inner b {
+  font-family:"メイリオ", sans-serif;
+  line-height: 1.4;
+}
+.willdo .inner strong {
+  //border-bottom: 1px solid purple;
+  margin: 20px 0px;
+  background: linear-gradient(transparent 80%, #ff99ff 80%);
+}
 
 .willdo .plus {
   z-index: 1;
@@ -92,6 +101,13 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
   top: 30px;
   right: 30px;
   display: none;
+}
+
+.willdo .inner .more {
+  opacity:  0.5;
+}
+.willdo .inner .more:hover {
+  opacity: 1;
 }
 
 

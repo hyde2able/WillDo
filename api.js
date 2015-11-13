@@ -31,7 +31,7 @@ module.exports.AddressToLngLon = function(address, req, res, callback){
 	geocoder.geocode(address, function( err, data ){
 		if( err ){
  			req.flash('alert', address + 'は検索できません。');
- 			req.url('/');
+ 			// req.url('/');
  			res.redirect(301, '/');
  			return;
  		}
