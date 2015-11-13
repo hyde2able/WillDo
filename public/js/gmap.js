@@ -22,7 +22,7 @@ $(function() {
 	/* 地図の初期化  */
 	function  initialize() {
 		var myOptions = {
-			zoom: 18,
+			zoom: 15,
 			center: StartLatLng,
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			scaleControl: true
@@ -163,18 +163,6 @@ $(function() {
 	});
 
   });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

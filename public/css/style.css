@@ -153,9 +153,12 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 }
 .ToGo li {
   position: relative;
-  right: 20px;
+  right: 30px;
   margin-bottom: 5px;
   border-bottom: 1px dotted rgba(255, 193, 109, .7);
+}
+.ToGo .remove {
+  float: right;
 }
 
 

@@ -12,7 +12,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="css/remodal.css" />
 
     <script src="/socket.io/socket.io.js"></script>
 
@@ -22,15 +22,19 @@
     <script src="js/socket.js"></script>
     <script src="js/gmap.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3"></script>
+    <script src="js/remodal.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js"></script>
 
     <script src="js/masonry.pkgd.min.js"></script>
     <script>
     $(window).load(function() {
-      $('.willdos').masonry({
-        itemSelector: '.willdo', //整理される要素のclassを指定
-        //isAnimated: true, //スムースアニメーション設定
-        isFitWidth: true //親要素の幅サイズがピッタリ
-      });
+      //$('#willdos')imagesLoaded(function() {
+        $('.willdos').masonry({
+          itemSelector: '.willdo',
+          isFitWidth: true
+        }); 
+      //});
     });
     </script>
 
@@ -71,6 +75,7 @@
       </div>
 
 
+      <div class="remodal-bg">
 
 
       <div class="row">
@@ -101,11 +106,19 @@
             <span>行き先リスト</span>
             <ul class="ToGo" id="ToGo">
             </ul>
-            <button type="button" class="btn btn-default" id="ToGoSearch">ルート検索</button>
+            <button type="button" class="btn btn-default" id="ToGoSearch"><a href="#modal">ルート検索</a></button>
+
+            <!--▼モーダルウィンドウ▼-->
+            <div class="remodal" data-remodal-id="modal" style="display:none;">
+              <div id="gmap" style="border: 1px solid black; width: 500px; height:500px;">
+            </div> 
+            </div>
+
           </div>       
         </div>
 
       </div>
+    </div>
     </div>
   </body>
 </html>
