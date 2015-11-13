@@ -28,10 +28,8 @@
     $(window).load(function() {
       $('.willdos').masonry({
         itemSelector: '.willdo', //整理される要素のclassを指定
-        isAnimated: true, //スムースアニメーション設定
-        isFitWidth: true, //親要素の幅サイズがピッタリ
-        isRTL: false,     //整理される要素が左右逆になる（読み言語などに）
-        isResizable: true //ウィンドウサイズが変更された時に並び替え
+        //isAnimated: true, //スムースアニメーション設定
+        isFitWidth: true //親要素の幅サイズがピッタリ
       });
     });
     </script>
@@ -52,7 +50,7 @@
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-              </button> <a class="navbar-brand" href="/">WillDo</a>
+              </button> <a class="navbar-brand" href="/"><img src="images/WillDo-Mlogo.png" style="position: absolute; top: 5px; left: 5px;"></a>
             </div>
         
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -98,14 +96,13 @@
 
         <div class="col-md-2">
           <div class="ToGoList">
-            <ul class="ToGo">
-              <li>名古屋城</li>
-              <li>東山動物園</li>
+            <div id="gmap" style="border: 1px solid black; width: 200px; height:200px;">
+            </div> 
+            <span>行き先リスト</span>
+            <ul class="ToGo" id="ToGo">
             </ul>
-          </div>
-
-          <div id="gmap" style="border: 1px solid black; width: 200px; height:200px;">
-          </div>        
+            <button type="button" class="btn btn-default" id="ToGoSearch">ルート検索</button>
+          </div>       
         </div>
 
       </div>
