@@ -11,6 +11,23 @@ $(function(){
   }, 3000);
 
 
+  /* willdoのサムネイル画像をホバーしたら+アイコンを表示 */
+  $(document).on({
+    "mouseenter": function(){
+      $(this).find("#plus").fadeIn(300);
+    },
+    "mouseleave": function(){
+      $(this).find("#plus").fadeOut(300);
+    }
+  }, '#inner');
+
+  $(document).on('click', '#plus', (function() {
+    var parent = $(this).parent().parent();
+    console.log(parent.attr('lat'));
+  }));
+
+
+
   // 例をクリックするとそれを検索部分にコピー
   $('span#example').click( function() {
     $("#address").val($(this).text());

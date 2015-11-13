@@ -70,14 +70,28 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 
 /* willdoのスタイル */
 
-div.willdo {
-
+.willdo {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-right: 1px dotted black;
 }
-div.willdo img{
+.willdo .thumb{
   width: 100%;
   height: auto;
 }
 
+.willdo .inner {
+  background-color: white;
+  border-radius: 10px;
+  padding: 5px;
+}
 
+.willdo .plus {
+  z-index: 1;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: none;
+}
 
 
