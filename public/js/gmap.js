@@ -83,14 +83,103 @@ $(function() {
 		});
 	};
 
+	// 行き先リスト
+	var List = {};
+	var count = 0;
 
 	/* willdoをクリックしたらそのlatとlngを取得してルート検索 */
 	$(document).on("click", "#willdo", (function() {
 		var lat = $(this).attr('lat')
 		,	lng = $(this).attr('lng');
-
-		console.log(lat + lng);
 		searchRoute(lat, lng);
 	}));
+
+	  /* willdoの+アイコンをクリックしたら行きたいリストに追加 */
+  $(document).on('click', '#plus', (function() {
+    var parent = $(this).parent().parent();
+    var name = parent.attr('name').substr(0, 7)
+    ,	lat = parent.attr('lat')
+    ,	lng = parent.attr('lng');
+
+    if(name in List){ return; }
+    if(count > 7) { return; }
+    List[name] = [lat, lng];
+    count++;
+
+    var $togo = $("<li></li>", {
+			html: '|- ' + name + '<img src="images/remove.png" id="remove" class="remove" width="20" height="20">'
+		});
+
+    $togo.attr('name', name);
+    $togo.attr('lat', lat);
+    $togo.attr('lng', lng);
+
+    $togo.appendTo($('#ToGo'));
+  }));
+
+  /* 行き先リストの右のマイナスボタンをクリックしたら行き先削除 */
+  $(document).on('click', '#remove', (function() {
+  	var $togo = $(this).closest('li');
+  	var name = $togo.attr('name');
+
+  	$togo.hide(300);
+  	delete List[name];
+  	count--;
+  }));
+
+
+
+  /* ルート検索を押したら行き先リストの行き方をプロット */
+  $('#ToGoSearch').click(function() {
+  	var ToGoList = [],	latlng;
+  	for(name in List) {
+  		latlng = new google.maps.LatLng( parseFloat(List[name][0]), parseFloat(List[name][1]) );
+    	ToGoList.push({ location:latlng, stopover: true });
+  	}
+
+  	var EndLatLng = ToGoList.pop().location;
+  	console.log(ToGoList);
+
+  	initialize();
+
+	var request={
+    	waypoints: ToGoList,		/* 経由地点 */
+    	optimizeWaypoints: true,
+    	origin: StartLatLng,        /* 出発地点 */
+    	destination: EndLatLng,        /* 到着地点 */
+    	travelMode: google.maps.DirectionsTravelMode.WALKING,                /* 交通手段 */
+    	avoidHighways: true,		// 高速道路は使わない
+		avoidTolls: true			// 有料道路は使わない
+    };
+
+    // ルート描画
+	directionsService.route(request, function(response, status) {
+		if( status == google.maps.DirectionsStatus.OK ) {
+			directionsDisplay.setDirections(response);
+		} else {
+			var message = directionsErr[status];
+			$('#messages').append('<div class="alert alert-warning alert-dismisable" role="alert" id="alert"><button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button><p><strong>warning</strong>：' + message + '</p></div>');
+		}
+	});
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });

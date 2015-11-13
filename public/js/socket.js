@@ -12,13 +12,13 @@ $(function(){
 	function appropriate(str){
 		var width = $(window).width, max;
 		if(width < 768) { // col-xs なら
-			max = 7;
+			max = 8;
 		} else if(width < 991) { // col-sm なら
-			max = 9;
-		} else if(width < 1199) { // col-md なら
 			max = 10;
-		} else { // col-ld なら
+		} else if(width < 1199) { // col-md なら
 			max = 12;
+		} else { // col-ld なら
+			max = 14;
 		}
 		var Ret = str.substr(0, max);
 		if(str.length > max) Ret += '...';
@@ -26,11 +26,12 @@ $(function(){
 	};
 
 	// 受け取ったdata(JSON)を元に専用のwilldoを生成するメソッド
-	function createWillDo(data, cb) {
+	function createWillDo(data, color, cb) {
 		var content = '';
 
 		var $willdo = $("<div></div>", {
 			css: { display: 'none' },
+			id: 'willdo',
 			addClass: 'willdo col-md-3 col-sm-6 col-xs-10'
 		});
 
@@ -42,9 +43,10 @@ $(function(){
 					content += '<img class="plus" id="plus" src="images/append.png" width="30" height="30" /> ';
 					break;
 				case "name":
-					content += '<a href="' + data.basic.url + '" target="_blank" class="name" >'
-					content += '<strong class="name">' + appropriate(data.basic[attr]) + '</strong>'; 
-					content += '</a>'; break;
+					content += '<a href="' + data.basic.url + '" target="_blank" class="name" style="background: linear-gradient(transparent 80%, ' + color + ' 80%);">'
+					content += '<strong>' + appropriate(data.basic[attr]) + '</strong>'; 
+					content += '</a>'; 
+					$willdo.attr(attr, data.basic[attr]); break;
 				case "lat": case "lng":
 					$willdo.attr(attr, data.basic[attr]); break;
 				case "pr_short":
@@ -61,13 +63,13 @@ $(function(){
 			if( empty(data.details[attr]) ){ continue; }	// 中身が空ならスキップ
 			switch(attr) {
 				case "address":
-					content += '<p class="address"> 住所:' + data.details[attr] + '</p>'; break;
+					content += '<p class="address"><pan>住所:</span>' + data.details[attr] + '</p>'; break;
 				case "access":
-					content += '<p class="access"> アクセス:' + data.details[attr] + '</p>'; break;
+					content += '<p class="access"><span>アクセス:</span>' + data.details[attr] + '</p>'; break;
 				case "pr_long":
-					content += '<p class="detail"> ' + data.details[attr] + '</p>'; break;
+					content += '<p class="detail"><span></span>' + data.details[attr] + '</p>'; break;
 				case "tel":
-					content += '<p class="tel"> 連絡先:' + data.details[attr] + '</p>'; break;
+					content += '<p class="tel"><span>TEL:</span>' + data.details[attr] + '</p>'; break;
 				default:
 					break;
 			}
@@ -126,26 +128,30 @@ $(function(){
 	// BarNaviのjsonを受け取る
 	socket.on('barnavi', function(json) {
 		var willdo = {
-			image: json.url_photo_l1 || '',
-			name: json.name,
-			lat: json.lat_world,
-			lng: json.lng_world,
-			budget: json.budget,
-			genre: json.type,
-			open: json.open,
-
-			address: json.address,
-			access: json.access,
-			url: {pc: json.url_pc, mobile: json.url_mobile}
+			basic: {
+				image: json.url_photo_l1 || '',
+				name: json.name,
+				lat: json.lat_world,
+				lng: json.lng_world,
+				budget: json.budget,
+				genre: json.type,
+				open: json.open
+			},
+			details: {
+				address: json.address,
+				access: json.access,
+				url: {pc: json.url_pc, mobile: json.url_mobile}
+			}
 		}
-
-		createWillDo(willdo, function($willdo) {
+		// 娯楽はオレンジ
+		var color = 'rgb(255, 155, 98)';
+		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
 
 	});
 
-	// BarNaviのjsonを受け取る
+	// GNaviのjsonを受け取る
 	socket.on('gnavi', function(json) {
 		var willdo = {
 			basic: {
@@ -166,7 +172,9 @@ $(function(){
 				tel: json.tel
 			}
 		};
-		createWillDo(willdo, function($willdo) {
+		// グルメは緑色
+		var color = 'rgb(148, 231, 89)';
+		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
 	});
@@ -176,7 +184,7 @@ $(function(){
 		$('#willdos').append('<h1>Campus</h1><p>' + JSON.stringify(json) + '</p>');
 	});
 
-	// BarNaviのjsonを受け取る
+	// gourumetのjsonを受け取る
 	socket.on('gourmet', function(json) {
 		var willdo = {
 			basic: {
@@ -194,13 +202,15 @@ $(function(){
 				url: {pc: json.urls.pc, mobile: ''}
 			} 
 		};
+		// グルメは緑色
+		var color = 'rgb(148, 231, 89)';
 
-		createWillDo(willdo, function($willdo) {
+		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
 	});
 
-	// BarNaviのjsonを受け取る
+	// placeのjsonを受け取る
 	socket.on('place', function(json) {
 		var willdo = {
 			name: json.Name,
@@ -251,7 +261,9 @@ $(function(){
 				pr_long: json.description || json.note
 			}
 		};
-		createWillDo(willdo, function($willdo) {
+		// サロンは紫色
+		var color = 'rgb(192, 74, 178)';
+		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
 	});
@@ -273,7 +285,8 @@ $(function(){
 				pr_long: json.description || json.note
 			}
 		};
-		createWillDo(willdo, function($willdo) {
+		var color = 'rgb(192, 74, 178)';
+		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
 	});
@@ -296,7 +309,8 @@ $(function(){
 				tel: json.telephoneNo
 			}
 		};
-		createWillDo(willdo, function($willdo) {
+		var color = 'rgb(88, 104, 190)';
+		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
 

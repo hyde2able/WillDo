@@ -21,16 +21,10 @@ $(function(){
     }
   }, '#inner');
 
-  /* willdoの+アイコンをクリックしたら行きたいリストに追加 */
-  $(document).on('click', '#plus', (function() {
-    var parent = $(this).parent().parent();
-    console.log(parent.attr('lat'));
-  }));
-
-
   /* moreボタンを押したら詳細フィールドが開く */
   $(document).on('click', '#more', (function() {
     $(this).next().show(300);
+    $(this).hide(300);
     setTimeout(function() {
       $('.willdos').masonry({
         itemSelector: '.willdo', //整理される要素のclassを指定

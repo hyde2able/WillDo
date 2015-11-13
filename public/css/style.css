@@ -18,16 +18,24 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  margin-top: -125px;
+  margin-top: -150px;
   margin-left: -300px;
   width: 600px;
-  height: 250px;
+  height: 300px;
   background-color: rgba(111, 123, 94, .5);
   padding: 20px;
   border-radius: 10px;
 }
+.search-block .logo{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
 .search-block p {
 	color: white;
+}
+.search-block p span {
+  margin: 2px;
 }
 
 
@@ -74,6 +82,7 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
   padding: 15px;
   margin-bottom: 20px;
   // border-right: 1px dotted black;
+  font-family: "Hiragino Kaku Gothic ProN","メイリオ", sans-serif;
 }
 .willdo .thumb{
   width: 100%;
@@ -81,19 +90,34 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 }
 
 .willdo .inner {
-  background-color: white;
-  border-radius: 10px;
+  background-color: rgba(255, 255, 255, .7);
+  border-radius: 0px 0px 10px 10px;
+  padding: 0px;
+}
+.willdo .inner p, .willdo .inner b {
   padding: 5px;
+  line-height: 1.6;
 }
-.willdo .inner a, .willdo .inner p, .willdo .inner b {
+.willdo .inner .name {
   font-family:"メイリオ", sans-serif;
-  line-height: 1.4;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  // background: linear-gradient(transparent 80%, #ff99ff 80%);
+  text-decoration: none;
 }
-.willdo .inner strong {
-  //border-bottom: 1px solid purple;
-  margin: 20px 0px;
-  background: linear-gradient(transparent 80%, #ff99ff 80%);
+
+.willdo .inner .pr {
+  padding: 5px;
+  margin-top: 20px;
 }
+.willdo .inner .open {
+
+}
+.willdo .inner .budget {
+
+}
+
+
 
 .willdo .plus {
   z-index: 1;
@@ -108,6 +132,30 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 }
 .willdo .inner .more:hover {
   opacity: 1;
+}
+
+/* ToGoList */
+.ToGoList {
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  background-color: rgba(255, 255, 172, .5);
+  padding: 10px;
+}
+.ToGoList span {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+.ToGo {
+  width: 200px;
+  list-style-type: none;
+  overflow: scroll;
+}
+.ToGo li {
+  position: relative;
+  right: 20px;
+  margin-bottom: 5px;
+  border-bottom: 1px dotted rgba(255, 193, 109, .7);
 }
 
 
