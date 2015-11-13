@@ -13,16 +13,16 @@ $(function(){
 		var content = '<div class="caption">';
 
 		var $willdo = $("<div></div>", {
-			css: { display: 'none' },
+			css: { display: 'inline-block' },
 			id: 'willdo',
-			addClass: 'willdo col-md-4 col-sm-6 col-xs-10'
+			addClass: 'willdo col-md-3 col-sm-6 col-xs-10'
 		});
 
 		for(type in hash) {
 			if( empty(hash[type]) ){ continue; } //中身が空ならスキップ
 			switch(type){
 				case "image":
-					content += '<img alt="' + hash.name + '" class="img-thumbnail text-center" src="' + hash[type] + '" />'; break;
+					content += '<img alt="' + hash.name + '"  src="' + hash[type] + '" />'; break;
 				case "lat": case "lng":
 					$willdo.attr(type, hash[type]); break;
 				case "name":

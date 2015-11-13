@@ -61,8 +61,8 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 		//Place(lat, lng);
 		//FourSquare(lat, lng);
 		//Salon(lat, lng);
-		Relax(lat, lng);
-		//Travel(lat, lng);
+		//Relax(lat, lng);
+		Travel(lat, lng);
 		//Hotel(lat, lng);
 };
 

@@ -67,5 +67,17 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
   -ms-transition: all 0.2s linear;
 }
 
+
+/* willdoのスタイル */
+
 div.willdo {
+
 }
+div.willdo img{
+  width: 100%;
+  height: auto;
+}
+
+
+
+

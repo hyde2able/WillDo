@@ -13,8 +13,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
-    <script src="/socket.io/socket.io.js"></script>
 
+    <script src="/socket.io/socket.io.js"></script>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -22,9 +22,21 @@
     <script src="js/socket.js"></script>
     <script src="js/gmap.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3"></script>
+
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script>
+    $(window).load(function() {
+      $('.willdos').masonry({
+        itemSelector: '.willdo',
+        isFitWidth: true
+      });
+    });
+    </script>
+
     <!--[if IE]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
 
   </head>
 
@@ -73,11 +85,24 @@
         </div>
         <br>
 
-        <div id="gmap" style="border: 1px solid black; width: 500px; height:500px;">
-          aaaaaa
+
+        <div class="col-md-10">
+          <div class="row">
+            <div class="willdos" id="willdos">
+            </div>
+          </div>
         </div>
 
-        <div class="willdos" id="willdos">
+        <div class="col-md-2">
+          <div class="ToGoList">
+            <ul class="ToGo">
+              <li>名古屋城</li>
+              <li>東山動物園</li>
+            </ul>
+          </div>
+
+          <div id="gmap" style="border: 1px solid black; width: 200px; height:200px;">
+          </div>        
         </div>
 
       </div>
