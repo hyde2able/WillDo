@@ -30,7 +30,7 @@ $(function(){
 		var content = '';
 
 		var $willdo = $("<div></div>", {
-			//css: { display: 'none' },
+			css: { display: 'none' },
 			id: 'willdo',
 			addClass: 'willdo col-md-3 col-sm-6 col-xs-10'
 		});
@@ -93,9 +93,7 @@ $(function(){
 	function addWillDo($willdo) {
 		$willdo.appendTo($('#willdos'));
 		var speed = ['slow', 'normal','fast'][(Math.round( Math.random()*2))];
-		//$('#willdos').append($willdo).masonry('appended', $willdo);
 		$willdo.fadeIn(speed);
-		//$willdo.masonry('reload');
 
 	};
 
@@ -123,6 +121,7 @@ $(function(){
 
 	});
 
+	// apiを叩いた結果をすべて取得したらdoneが呼ばれる。そっからmasonryで成形
 	socket.on('done', function(torf){
 		console.log('got it');
 		$('#willdos').imagesLoaded(function() {

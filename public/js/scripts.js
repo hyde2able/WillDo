@@ -28,7 +28,6 @@ $(function(){
     setTimeout(function() {
       $('.willdos').masonry({
         itemSelector: '.willdo', //整理される要素のclassを指定
-        // isAnimated: true, //スムースアニメーション設定
         isFitWidth: true //親要素の幅サイズがピッタリ
       });
     }, 300);
@@ -42,7 +41,6 @@ $(function(){
     setTimeout(function() {
       $('.willdos').masonry({
         itemSelector: '.willdo', //整理される要素のclassを指定
-        //isAnimated: true, //スムースアニメーション設定
         isFitWidth: true //親要素の幅サイズがピッタリ
       });
     }, 300);

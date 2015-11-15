@@ -9,6 +9,13 @@ router.get('/', function(req, res, next) {
 	return;
 });
 
+process.on('uncaughtException', function(err) {
+    console.log(err);
+    router.get('/', function(req, res, next) {
+		res.render('index', {messages: ['住所が不適切です'] } );
+	return;
+});
+});
 
 router.post('/', function(req, res, next) {
 	// var address = req.query.address;

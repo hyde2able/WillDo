@@ -40,29 +40,41 @@ module.exports.AddressToLngLon = function(address, req, res, callback){
  			res.redirect(301, '/');
  			return;
  		}
-		var formatted_address = data.results[0].formatted_address;
+ 		try{
+			var formatted_address = data.results[0].formatted_address;
+		} catch(e) {
+			console.log(e);
+			res.render('index', {messages: ['住所が不適切です。'] } );
+		}
+
 		var geometry = data.results[0].geometry.location;
 		var lat = geometry.lat, lng = geometry.lng;
-		callback(lat, lng);
+		callback(lat, lng, res);
 	});
 };
 
-module.exports.ReverseGeo = function(lat, lng, callback){
+module.exports.ReverseGeo = function(lat, lng, res, callback){
 	var ReverseURI = "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?lat=" + lat + "&lon=" + lng + "&output=json&appid=" + config.Yahoo.appid;
 	request(ReverseURI, function(err, res, body){
-		if( !err && res.statusCode == 200){
+		try {
 			var address = JSON.parse(body).Feature[0].Property.Address;
-			callback(address);
-		} else {
-			console.log("We couldn't reverseGeoCoder"); return;
+		} catch(e) {
+			console.log(e);
+			res.render('index', {messages: ['住所が検索できませんでした。'] } );
 		}
+		// if( !err && res.statusCode == 200){
+		// 	var address = JSON.parse(body).Feature[0].Property.Address;
+		// 	callback(address);
+		// } else {
+		// 	console.log("We couldn't reverseGeoCoder"); return;
+		// }
 	});
 
 		//Weather(lat, lng);
 		//BarNavi(lat, lng);
-		//GNavi(lat, lng);
+		GNavi(lat, lng);
 		//Campus(lat, lng);
-		//Gourmet(lat, lng);
+		Gourmet(lat, lng);
 		//Place(lat, lng);
 		//FourSquare(lat, lng);
 		Salon(lat, lng);
