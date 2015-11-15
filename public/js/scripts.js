@@ -28,10 +28,8 @@ $(function(){
     setTimeout(function() {
       $('.willdos').masonry({
         itemSelector: '.willdo', //整理される要素のclassを指定
-        isAnimated: true, //スムースアニメーション設定
-        isFitWidth: true, //親要素の幅サイズがピッタリ
-        isRTL: false,     //整理される要素が左右逆になる（読み言語などに）
-        isResizable: true //ウィンドウサイズが変更された時に並び替え
+        // isAnimated: true, //スムースアニメーション設定
+        isFitWidth: true //親要素の幅サイズがピッタリ
       });
     }, 300);
     // 300秒待たせるのは、showに300msかけているので、それが移動しきってからじゃないとwidthをmansoryが計算できないから
@@ -44,10 +42,8 @@ $(function(){
     setTimeout(function() {
       $('.willdos').masonry({
         itemSelector: '.willdo', //整理される要素のclassを指定
-        isAnimated: true, //スムースアニメーション設定
-        isFitWidth: true, //親要素の幅サイズがピッタリ
-        isRTL: false,     //整理される要素が左右逆になる（読み言語などに）
-        isResizable: true //ウィンドウサイズが変更された時に並び替え
+        //isAnimated: true, //スムースアニメーション設定
+        isFitWidth: true //親要素の幅サイズがピッタリ
       });
     }, 300);
   }));

@@ -87,6 +87,7 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 .willdo .thumb{
   width: 100%;
   height: auto;
+  margin: 0;
 }
 
 .willdo .inner {
@@ -133,6 +134,49 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 .willdo .inner .more:hover {
   opacity: 1;
 }
+h4 {
+  color: #444;
+  font-size: 15px;
+  position: relative;
+  padding: 0 0 2px 32px;
+  border-bottom: 1px solid #888;
+}
+h4:before, h4:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  margin: auto;
+}
+.red:before, .red:after {
+  border: 2px solid #FB3E3E;
+}
+.purple:before, .purple:after {
+  border: 2px solid #892EA6;
+}
+.yellow:before, .yellow:after {
+  border: 2px solid #FBDB3E;
+}
+h4:before{
+  top: -12px;
+  left: 7px;
+}
+h4:after{
+  top: 0px;
+  left: 13px;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* ToGoList */
 .ToGoList {

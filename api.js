@@ -11,13 +11,18 @@ var flash = require('express-flash');
 var JSONStream = require('JSONStream');
 var es = require('event-stream');
 
+var async = require('async');
+
 // クライアントに送信するメソッドServer2Clientを持つオブジェクト
 var S2C = require('./bin/www');
 
 
 // 指定したURLのapiを叩いて、帰って来たJSONのformatに合わせてストリーミングで取得したdataをdataNameという名前でエミットする。
 var emitJSON = function(url, format, dataName) {
-	request({url: url})
+	request({url: url}, function(){ 
+		// requsetでapiを叩いた結果がすべて帰ってきた後のコールバック関数
+		S2C.Server2Client('done', 'done');
+	 })
 		.pipe(JSONStream.parse(format))
 		.pipe(es.mapSync( function(data) {
 			//console.log(data);
@@ -55,14 +60,14 @@ module.exports.ReverseGeo = function(lat, lng, callback){
 
 		//Weather(lat, lng);
 		//BarNavi(lat, lng);
-		GNavi(lat, lng);
+		//GNavi(lat, lng);
 		//Campus(lat, lng);
-		Gourmet(lat, lng);
+		//Gourmet(lat, lng);
 		//Place(lat, lng);
 		//FourSquare(lat, lng);
 		Salon(lat, lng);
 		Relax(lat, lng);
-		Travel(lat, lng);
+		//Travel(lat, lng);
 		//Hotel(lat, lng);
 };
 

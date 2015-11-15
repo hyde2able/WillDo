@@ -12,13 +12,13 @@ $(function(){
 	function appropriate(str){
 		var width = $(window).width, max;
 		if(width < 768) { // col-xs なら
-			max = 8;
+			max = 7;
 		} else if(width < 991) { // col-sm なら
-			max = 10;
+			max = 8;
 		} else if(width < 1199) { // col-md なら
-			max = 12;
+			max = 10;
 		} else { // col-ld なら
-			max = 14;
+			max = 12;
 		}
 		var Ret = str.substr(0, max);
 		if(str.length > max) Ret += '...';
@@ -30,7 +30,7 @@ $(function(){
 		var content = '';
 
 		var $willdo = $("<div></div>", {
-			css: { display: 'none' },
+			//css: { display: 'none' },
 			id: 'willdo',
 			addClass: 'willdo col-md-3 col-sm-6 col-xs-10'
 		});
@@ -43,9 +43,11 @@ $(function(){
 					content += '<img class="plus" id="plus" src="images/append.png" width="30" height="30" /> ';
 					break;
 				case "name":
-					content += '<a href="' + data.basic.url + '" target="_blank" class="name" style="background: linear-gradient(transparent 80%, ' + color + ' 80%);">'
-					content += '<strong>' + appropriate(data.basic[attr]) + '</strong>'; 
-					content += '</a>'; 
+					content += '<h4 class="' + color + '">' + appropriate(data.basic[attr]) + '</h4>';
+
+					// content += '<a href="' + data.basic.url + '" target="_blank" class="name" style="background: linear-gradient(transparent 80%, ' + color + ' 80%);">'
+					// content += '<strong>' + appropriate(data.basic[attr]) + '</strong>'; 
+					// content += '</a>'; 
 					$willdo.attr(attr, data.basic[attr]); break;
 				case "lat": case "lng":
 					$willdo.attr(attr, data.basic[attr]); break;
@@ -91,7 +93,10 @@ $(function(){
 	function addWillDo($willdo) {
 		$willdo.appendTo($('#willdos'));
 		var speed = ['slow', 'normal','fast'][(Math.round( Math.random()*2))];
+		//$('#willdos').append($willdo).masonry('appended', $willdo);
 		$willdo.fadeIn(speed);
+		//$willdo.masonry('reload');
+
 	};
 
 
@@ -116,6 +121,16 @@ $(function(){
 
 	socket.on('connect', function() {
 
+	});
+
+	socket.on('done', function(torf){
+		console.log('got it');
+		$('#willdos').imagesLoaded(function() {
+			$('.willdos').masonry({
+          		itemSelector: '.willdo',
+          		isFitWidth: true
+        	});
+        }); 
 	});
 
 	// 天気情報を受け取る
@@ -145,6 +160,7 @@ $(function(){
 		}
 		// 娯楽はオレンジ
 		var color = 'rgb(255, 155, 98)';
+		color = 'red'
 		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
@@ -174,6 +190,7 @@ $(function(){
 		};
 		// グルメは緑色
 		var color = 'rgb(148, 231, 89)';
+		color = 'yellow';
 		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
@@ -204,6 +221,7 @@ $(function(){
 		};
 		// グルメは緑色
 		var color = 'rgb(148, 231, 89)';
+		color = 'yellow';
 
 		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
@@ -263,6 +281,8 @@ $(function(){
 		};
 		// サロンは紫色
 		var color = 'rgb(192, 74, 178)';
+		color = 'purple';
+
 		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
@@ -286,6 +306,7 @@ $(function(){
 			}
 		};
 		var color = 'rgb(192, 74, 178)';
+		color = 'purple';
 		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
@@ -310,6 +331,7 @@ $(function(){
 			}
 		};
 		var color = 'rgb(88, 104, 190)';
+		color = 'red';
 		createWillDo(willdo, color, function($willdo) {
 			addWillDo($willdo);
 		});
