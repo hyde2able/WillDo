@@ -5,7 +5,7 @@ var request = require('request');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session')
-var flash = require('express-flash');
+// var flash = require('express-flash');
 
 // 大量のJSONをストリーミングで取得
 var JSONStream = require('JSONStream');
@@ -36,7 +36,6 @@ module.exports.AddressToLngLon = function(address, req, res, callback){
 	geocoder.geocode(address, function( err, data ){
 		if( err ){
  			req.flash('alert', address + 'は検索できません。');
- 			// req.url('/');
  			res.redirect(301, '/');
  			return;
  		}
@@ -62,12 +61,6 @@ module.exports.ReverseGeo = function(lat, lng, res, callback){
 			console.log(e);
 			res.render('index', {messages: ['住所が検索できませんでした。'] } );
 		}
-		// if( !err && res.statusCode == 200){
-		// 	var address = JSON.parse(body).Feature[0].Property.Address;
-		// 	callback(address);
-		// } else {
-		// 	console.log("We couldn't reverseGeoCoder"); return;
-		// }
 	});
 
 		//Weather(lat, lng);
