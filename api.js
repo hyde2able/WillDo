@@ -57,12 +57,11 @@ module.exports.ReverseGeo = function(lat, lng, res, callback){
 	request(ReverseURI, function(err, res, body){
 		try {
 			var address = JSON.parse(body).Feature[0].Property.Address;
+			callback(address);
 		} catch(e) {
 			console.log(e);
 			res.render('index', {messages: ['住所が検索できませんでした。'] } );
 		}
-	});
-
 		//Weather(lat, lng);
 		//BarNavi(lat, lng);
 		GNavi(lat, lng);
@@ -74,6 +73,7 @@ module.exports.ReverseGeo = function(lat, lng, res, callback){
 		Relax(lat, lng);
 		//Travel(lat, lng);
 		//Hotel(lat, lng);
+	});
 };
 
 

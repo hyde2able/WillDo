@@ -9,7 +9,12 @@ body {
   }
 }
 
-
+.navbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+}
 .navbar a {
   color: #00B7FF;
 }
@@ -77,37 +82,42 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 
 
 /* willdoのスタイル */
-
-.willdo {
-  padding: 15px;
-  margin-bottom: 20px;
-  // border-right: 1px dotted black;
-  font-family: "Hiragino Kaku Gothic ProN","メイリオ", sans-serif;
+.col-sm-12, .col-md-6 {
+  margin: 0;
+  padding: 5px;
 }
-.willdo .thumb{
-  width: 100%;
-  height: auto;
+
+.willdos {
   margin: 0;
 }
 
-.willdo .inner {
-  background-color: rgba(255, 255, 255, .7);
-  border-radius: 0px 0px 10px 10px;
-  padding: 0px;
+.willdo {
+  padding: 3px;
+  margin: 0;
+  font-family: "Hiragino Kaku Gothic ProN","メイリオ", sans-serif;
+  background-color: #fff;
+  margin-bottom: 15px;
+  position: relative;
 }
-.willdo .inner p, .willdo .inner b {
+.willdo .thumbnail{
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 2px;
+}
+
+.willdo p, .willdo b {
   padding: 5px;
   line-height: 1.6;
 }
-.willdo .inner .name {
+.willdo .name {
   font-family:"メイリオ", sans-serif;
   margin-top: 60px;
   margin-bottom: 20px;
-  // background: linear-gradient(transparent 80%, #ff99ff 80%);
   text-decoration: none;
 }
 
-.willdo .inner .pr {
+.willdo .pr {
   padding: 5px;
   margin-top: 20px;
 }
@@ -123,15 +133,15 @@ a.here:active img, #search-btn:active, .info:active img{ opacity: .8; }
 .willdo .plus {
   z-index: 1;
   position: absolute;
-  top: 30px;
+  top: 20px;
   right: 30px;
   display: none;
 }
 
-.willdo .inner .more {
+.willdo .more {
   opacity:  0.5;
 }
-.willdo .inner .more:hover {
+.willdo .more:hover {
   opacity: 1;
 }
 h4 {
@@ -181,17 +191,32 @@ h4:after{
 /* ToGoList */
 .ToGoList {
   position: fixed;
-  top: 100px;
-  right: 50px;
-  background-color: rgba(255, 255, 172, .5);
-  padding: 10px;
+  top: 50px;
+  left: 0px;
+  width: 33%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, .8);
+  padding: 0px;
 }
-.ToGoList span {
+.ToGoList h3 {
+  text-align: center;
   margin: 10px 0;
   line-height: 1.5;
+  border-bottom: 1px dotted #888;
+}
+.ToGoSearch {
+  position: absolute;
+  width: 100%;
+  top: 60%;
+} 
+.ToGoSearch button {
+  position: absolute;
+  left: 50%;
+  margin-left: -50px;
 }
 .ToGo {
-  width: 200px;
+  position: relative;
+  top: 0px;
   list-style-type: none;
   overflow: scroll;
 }
@@ -203,6 +228,13 @@ h4:after{
 }
 .ToGo .remove {
   float: right;
+}
+#gmap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
 }
 
 

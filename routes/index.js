@@ -22,7 +22,7 @@ router.post('/', function(req, res, next) {
 		return;
 	}
 	api.AddressToLngLon(address, req, res, function(lat, lng) {
-		api.ReverseGeo(lat, lng, function(japan_address) {
+		api.ReverseGeo(lat, lng, res, function(japan_address) {
 			res.render('search', {messages: [], title: japan_address, lat: lat, lng: lng});
 		});
 	});

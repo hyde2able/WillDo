@@ -19,31 +19,18 @@ $(function(){
     "mouseleave": function(){
       $(this).find("#plus").fadeOut(300);
     }
-  }, '#inner');
+  }, '#willdo');
 
   /* moreボタンを押したら詳細フィールドが開く */
   $(document).on('click', '#more', (function() {
     $(this).next().show(300);
     $(this).hide(300);
-    setTimeout(function() {
-      $('.willdos').masonry({
-        itemSelector: '.willdo', //整理される要素のclassを指定
-        isFitWidth: true //親要素の幅サイズがピッタリ
-      });
-    }, 300);
-    // 300秒待たせるのは、showに300msかけているので、それが移動しきってからじゃないとwidthをmansoryが計算できないから
   }));
 
   /* moreボタンを押して詳細フィールドが出現したら、nomoreボタンで元に戻るように */
   $(document).on('click', '#nomore', (function() {
     $(this).parent().hide(300);
     $(this).parent().prev('#more').show(300);
-    setTimeout(function() {
-      $('.willdos').masonry({
-        itemSelector: '.willdo', //整理される要素のclassを指定
-        isFitWidth: true //親要素の幅サイズがピッタリ
-      });
-    }, 300);
   }));
 
 

@@ -96,8 +96,8 @@ $(function() {
 
 	  /* willdoの+アイコンをクリックしたら行きたいリストに追加 */
   $(document).on('click', '#plus', (function() {
-    var parent = $(this).parent().parent();
-    var name = parent.attr('name').substr(0, 7)
+    var parent = $(this).parent();
+    var name = parent.attr('name')
     ,	lat = parent.attr('lat')
     ,	lng = parent.attr('lng');
 
@@ -105,6 +105,8 @@ $(function() {
     if(count > 7) { return; }
     List[name] = [lat, lng];
     count++;
+
+    console.log( name );
 
     var $togo = $("<li></li>", {
 			html: '|- ' + name + '<img src="images/remove.png" id="remove" class="remove" width="20" height="20">'

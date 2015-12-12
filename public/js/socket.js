@@ -10,6 +10,8 @@ $(function(){
 
 	// 名前が15文字以上だと1行に収まらないので、画像の大きさに合わせて表示文字列を変更して返す
 	function appropriate(str){
+		return str;
+
 		var width = $(window).width, max;
 		if(width < 768) { // col-xs なら
 			max = 7;
@@ -28,29 +30,25 @@ $(function(){
 	// 受け取ったdata(JSON)を元に専用のwilldoを生成するメソッド
 	function createWillDo(data, color, cb) {
 		var content = '';
-
-		var $willdo = $("<div></div>", {
-			css: { display: 'none' },
-			id: 'willdo',
-			addClass: 'willdo col-md-3 col-sm-6 col-xs-10'
-		});
+		content += '<img class="plus" id="plus" src="images/append.png" width="30" height="30" /> ';
 
 		for(attr in data.basic) {
 			if( empty(data.basic[attr]) ){ continue; }	// 中身が空ならスキップ
 			switch(attr) {
 				case "image":
-					content += '<img alt="' + data.basic.name + '" id="thumbnail" class="thumb" src="' + data.basic[attr] + '" />'; 
-					content += '<img class="plus" id="plus" src="images/append.png" width="30" height="30" /> ';
+					content += '<img alt="' + data.basic.name + '" id="thumbnail" class="card-img-top thumbnail" src="' + data.basic[attr] + '" />'; 
 					break;
 				case "name":
-					content += '<h4 class="' + color + '">' + appropriate(data.basic[attr]) + '</h4>';
+					content += '<h4 class="' + color + ' card-title">' + appropriate(data.basic[attr]) + '</h4>';
 
 					// content += '<a href="' + data.basic.url + '" target="_blank" class="name" style="background: linear-gradient(transparent 80%, ' + color + ' 80%);">'
 					// content += '<strong>' + appropriate(data.basic[attr]) + '</strong>'; 
 					// content += '</a>'; 
-					$willdo.attr(attr, data.basic[attr]); break;
+					//$willdo.attr(attr, data.basic[attr]); break;
+					break;
 				case "lat": case "lng":
-					$willdo.attr(attr, data.basic[attr]); break;
+					//$willdo.attr(attr, data.basic[attr]); break;
+					break;
 				case "pr_short":
 					content += '<p class="pr">' + data.basic[attr] + '</p>'; break;
 				default:
@@ -80,18 +78,28 @@ $(function(){
 		content += '</div>';
 
 
-		$('<div></div>', {
-			addClass: 'inner',
-			id: 'inner',
+
+
+		var $willdo = $("<div></div>", {
+			css: { display: 'none' },
+			id: 'willdo',
+			addClass: 'willdo',
 			html: content
-		}).appendTo($willdo);
+		});
+
+		$willdo.attr('name', data.basic['name']);
+		$willdo.attr('lat', data.basic['lat']);
+		$willdo.attr('lng', data.basic['lng']);
 
 		cb($willdo);
 	};
 
+	count = 0;
 	// 受け取ったwilldoを#willdosにアニメーションで追加してさらに場所はランダムに追加する
 	function addWillDo($willdo) {
-		$willdo.appendTo($('#willdos'));
+		var ch = ['a','b'][count % 2];
+		$willdo.appendTo($('#willdos #' + ch));
+		count += 1;
 		var speed = ['slow', 'normal','fast'][(Math.round( Math.random()*2))];
 		$willdo.fadeIn(speed);
 
@@ -123,13 +131,6 @@ $(function(){
 
 	// apiを叩いた結果をすべて取得したらdoneが呼ばれる。そっからmasonryで成形
 	socket.on('done', function(torf){
-		console.log('got it');
-		$('#willdos').imagesLoaded(function() {
-			$('.willdos').masonry({
-          		itemSelector: '.willdo',
-          		isFitWidth: true
-        	});
-        }); 
 	});
 
 	// 天気情報を受け取る
