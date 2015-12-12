@@ -106,17 +106,16 @@ $(function() {
     List[name] = [lat, lng];
     count++;
 
-    console.log( name );
-
     var $togo = $("<li></li>", {
-			html: '|- ' + name + '<img src="images/remove.png" id="remove" class="remove" width="20" height="20">'
+			html: name + '<img src="images/remove.png" id="remove" class="remove" width="20" height="20">',
+            addClass: "ui-state-default"
 		});
 
     $togo.attr('name', name);
     $togo.attr('lat', lat);
     $togo.attr('lng', lng);
 
-    $togo.appendTo($('#ToGo'));
+    $togo.appendTo($('.ToGoList ol'));
   }));
 
   /* 行き先リストの右のマイナスボタンをクリックしたら行き先削除 */
@@ -134,10 +133,13 @@ $(function() {
   /* ルート検索を押したら行き先リストの行き方をプロット */
   $('#ToGoSearch').click(function() {
   	var ToGoList = [],	latlng;
-  	for(name in List) {
-  		latlng = new google.maps.LatLng( parseFloat(List[name][0]), parseFloat(List[name][1]) );
-    	ToGoList.push({ location:latlng, stopover: true });
-  	}
+
+    $('.ToGoList ol li').each(function(i, li) {
+        var lat = parseFloat( $(li).attr('lat') );
+        var lng = parseFloat( $(li).attr('lng') );
+        latlng = new google.maps.LatLng(lat, lng);
+        ToGoList.push({ location: latlng, stopover: true});
+    });
 
   	var EndLatLng = ToGoList.pop().location;
   	console.log(ToGoList);

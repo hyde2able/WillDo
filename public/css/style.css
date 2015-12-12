@@ -189,7 +189,7 @@ h4:after{
 
 
 /* ToGoList */
-.ToGoList {
+.ToGo {
   position: fixed;
   top: 50px;
   left: 0px;
@@ -198,35 +198,79 @@ h4:after{
   background-color: rgba(240, 240, 240, .8);
   padding: 0px;
 }
-.ToGoList h3 {
+.ToGo h3 {
   text-align: center;
   margin: 10px 0;
   line-height: 1.5;
   border-bottom: 1px dotted #888;
 }
-.ToGoSearch {
+.ToGoList {
   position: absolute;
   width: 100%;
   top: 60%;
+  height: 35%;
+  overflow: scroll;
 } 
-.ToGoSearch button {
+.ToGoList button {
   position: absolute;
-  left: 50%;
-  margin-left: -50px;
+  right: 10px;
 }
-.ToGo {
+.ToGoList ol {
   position: relative;
   top: 0px;
   list-style-type: none;
-  overflow: scroll;
+  counter-reset: li; /* Initiate a counter */
+  *list-style: decimal; /* Keep using default numbering for IE6/7 */
+  font: 15px 'trebuchet MS', 'lucida sans';
+  padding: 0;
+  margin-bottom: 4em;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
-.ToGo li {
+
+.ToGoList ol li{
   position: relative;
-  right: 30px;
-  margin-bottom: 5px;
+  left: 40px;
+  display: block;
+  padding: .4em .4em .4em 2em;
+  *padding: .4em;
+  margin: .5em 0;
+  background: #ddd;
+  color: #444;
+  text-decoration: none;
+  border-radius: .3em;
+  transition: all .3s ease-out;
   border-bottom: 1px dotted rgba(255, 193, 109, .7);
+  width: 80%;
+  cursor: move;
 }
-.ToGo .remove {
+ 
+.ToGoList ol li:hover{
+  background: #eee;
+}
+ 
+.ToGoList ol li:hover:before{
+  transform: rotate(360deg);
+}
+ 
+.ToGoList ol li:before{
+  content: counter(li);
+  counter-increment: li;
+  position: absolute;
+  left: -1.3em;
+  top: 50%;
+  margin-top: -1.0em;
+  background: #87ceeb;
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  border: .1em solid #fff;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 2em;
+  transition: all .3s ease-out;
+}
+
+.ToGoList .remove {
   float: right;
 }
 #gmap {

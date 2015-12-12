@@ -17,6 +17,7 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
     <script src="js/socket.js"></script>
     <script src="js/scripts.js"></script>
     <script src="js/gmap.js"></script>
@@ -26,8 +27,12 @@
     <!--[if IE]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-
+    <script>
+    $(function() {
+      $( '#jquery-ui-sortable' ) . sortable();
+      $( '#jquery-ui-sortable' ) . disableSelection();
+    });
+    </script>
   </head>
 
 
@@ -68,14 +73,14 @@
 
 
         <div class="col-sm-12 col-md-4">
-          <div class="ToGoList">
+          <div class="ToGo">
             <div id="gmap" style="border: 1px solid black;"></div> 
 
-            <div class="ToGoSearch">
-              <h3>行き先リスト</h3>
-              <ol class="ToGo" id="ToGo">
-              </ol>
-              <button type="button" class="btn btn-default" id="ToGoSearch"><a href="#modal">ルート検索</a></button>
+            <div class="ToGoList">
+              <div style="position: static;">
+              <h3>行き先リスト<button type="button" class="btn btn-default" id="ToGoSearch"><a href="#modal">ルート検索</a></button></h3>
+            </div>
+              <ol id="jquery-ui-sortable"></ol>
             </div>
           </div>    
         </div>
