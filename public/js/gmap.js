@@ -39,11 +39,6 @@ $(function() {
 			"draggable": true
 		});
 		directionsDisplay.suppressMarkers = true; 
-		// var originMarker = CreateMarker( StartLatLng ); 
-		/* 右カラムにルート表示 */
-		// directionsDisplay.setPanel( document.getElementById('directions_panel') );
-
-
 	};
     
     /* マーカーを作成 */
@@ -77,6 +72,7 @@ $(function() {
 			if( status == google.maps.DirectionsStatus.OK ) {
 				directionsDisplay.setDirections(response);
 			} else {
+                console.log(status);
 				var message = directionsErr[status];
 				$('#messages').append('<div class="alert alert-warning alert-dismisable" role="alert" id="alert"><button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button><p><strong>warning</strong>：' + message + '</p></div>');
 			}
@@ -161,6 +157,7 @@ $(function() {
 		if( status == google.maps.DirectionsStatus.OK ) {
 			directionsDisplay.setDirections(response);
 		} else {
+            console.log(status);
 			var message = directionsErr[status];
 			$('#messages').append('<div class="alert alert-warning alert-dismisable" role="alert" id="alert"><button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button><p><strong>warning</strong>：' + message + '</p></div>');
 		}
