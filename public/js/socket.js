@@ -32,11 +32,16 @@ $(function(){
 		var content = '';
 		content += '<img class="plus" id="plus" src="images/append.png" width="30" height="30" /> ';
 
+		if( data.basic.image.length > 0 ) {
+			content += '<img alt="' + data.basic.name + '" id="thumbnail" class="card-img-top thumbnail" src="' + data.basic.image + '" />';
+		} else {
+			content += '<img alt="画像がありません" id="thumbnail" class="card-img-top thumbnail" src="images/noimage.jpg" />'
+		}
+
 		for(attr in data.basic) {
 			if( empty(data.basic[attr]) ){ continue; }	// 中身が空ならスキップ
 			switch(attr) {
 				case "image":
-					content += '<img alt="' + data.basic.name + '" id="thumbnail" class="card-img-top thumbnail" src="' + data.basic[attr] + '" />'; 
 					break;
 				case "name":
 					content += '<h4 class="' + color + ' card-title">' + appropriate(data.basic[attr]) + '</h4>';
